@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tourist Pharmacy – Safe & Convenient Medication Access in Indonesia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tourist Pharmacy helps tourists, expats, and residents in Indonesia get safe, legal access to medication via a licensed local pharmacy partner in Bali.">
+
+  <!-- Favicon as inline SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%230b2840'/%3E%3Crect x='42' y='26' width='16' height='48' rx='3' fill='%23d9a52f'/%3E%3Crect x='26' y='42' width='48' height='16' rx='3' fill='%23d9a52f'/%3E%3C/svg%3E">
+
+  <!-- Main styles inline -->
+  <style>
+    :root {
+      --primary: #0b2840;
+      --accent: #d9a52f;
+      --primary-light: #e6f1f8;
+      --text: #222;
+      --muted: #666;
+      --bg: #f7fafc;
+      --white: #ffffff;
+      --max-width: 980px;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), #145b86);
+      color: var(--white);
+      padding: 24px 16px 40px;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .logo {
+      height: 52px;
+      width: 52px;
+      object-fit: contain;
+      border-radius: 999px;
+      background: var(--white);
+      padding: 4px;
+    }
+
+    .inline-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-left: 14px;
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+
+    .inline-links a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    .hero {
+      display: grid;
+      gap: 24px;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .hero p.lead {
+      font-size: 1.02rem;
+      max-width: 640px;
+      opacity: 0.96;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #25D366;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.7);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .hero-card {
+      background: rgba(255,255,255,0.12);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-size: 0.9rem;
+    }
+
+    .hero-card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+
+    main {
+      padding: 30px 0 40px;
+    }
+
+    section {
+      margin-bottom: 30px;
+    }
+
+    section h2 {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      color: var(--primary);
+    }
+
+    .section-intro {
+      margin-top: 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 18px 18px 16px;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.08);
+      margin-bottom: 16px;
+    }
+
+    .two-column {
+      display: grid;
+      gap: 16px;
+    }
+
+    .three-column {
+      display: grid;
+      gap: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        grid-template-columns: 3fr 2.2fr;
+        align-items: center;
+      }
+      .two-column {
+        grid-template-columns: 1.4fr 1.2fr;
+      }
+      .three-column {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    ul, ol {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .tag-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: var(--primary-light);
+      font-size: 0.78rem;
+      color: var(--primary);
+      margin: 2px 4px 2px 0;
+    }
+
+    .fact-list li {
+      margin-bottom: 4px;
+    }
+
+    footer {
+      border-top: 1px solid #e2e8f0;
+      padding: 16px 16px 24px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: #fdfdfd;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      margin-top: 4px;
+    }
+
+    .footer-links a {
+      margin-right: 10px;
+    }
+  </style>
+
+  <!-- Schema.org Pharmacy structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Pharmacy",
+    "name": "Tourist Pharmacy",
+    "url": "https://touristpharmacy.com/",
+    "image": "https://touristpharmacy.com/logo.png",
+    "telephone": "+62 895-1802-3363",
+    "email": "support@balidoc.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan",
+      "addressLocality": "Kota Denpasar",
+      "addressRegion": "Bali",
+      "postalCode": "80224",
+      "addressCountry": "ID"
+    },
+    "founder": {
+      "@type": "Organization",
+      "name": "PT Sehat Investasi Digital",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Plaza Mutiara, 8th floor, Jl. Dr. Ide Anak Agung Gde Agung Kuningan Timur Kav. E.1.2 No. 1 & 2",
+        "addressLocality": "Kota Adm. Jakarta Selatan",
+        "addressRegion": "DKI Jakarta",
+        "postalCode": "12950",
+        "addressCountry": "ID"
+      }
+    }
+  }
+  </script>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+      <div class="brand">
+        <img src="logo.png" alt="Tourist Pharmacy logo" class="logo">
+        <span>Tourist Pharmacy</span>
+      </div>
+      <div class="inline-links">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#what-we-do">What We Can Do</a>
+        <a href="#safety">Safety</a>
+        <a href="#contact">Contact</a>
+        <a href="about.html">About & Legal</a>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div>
+        <div class="badge">
+          <span class="badge-dot"></span>
+          Licensed local pharmacy partner in Bali
+        </div>
+        <h1>Your bridge to safe medication in Indonesia</h1>
+        <p class="lead">
+          Tourist Pharmacy helps tourists, expats, and residents in Indonesia get safe, legal access to medication
+          through a licensed community pharmacy in Denpasar, Bali – without guessing which pharmacy to trust.
+        </p>
+        <div class="hero-actions">
+          <a href="https://wa.me/6289518023363"
+             target="_blank"
+             rel="noopener"
+             class="btn-primary">
+            💬 Chat via WhatsApp
+          </a>
+          <a href="#how-it-works" class="btn-secondary">
+            See how it works
+          </a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>Quick overview</h3>
+        <ul>
+          <li>We connect you with a licensed local pharmacy in Bali.</li>
+          <li>Valid prescription needed for prescription-only medicines.</li>
+          <li>No controlled substances, no export outside Indonesia.</li>
+          <li>All medications dispensed by qualified pharmacists.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works">
+      <h2>How Tourist Pharmacy works</h2>
+      <p class="section-intro">
+        Simple, human, and WhatsApp-based for now. No complicated apps – just a clear, safe process.
+      </p>
+
+      <div class="three-column">
+        <div class="card">
+          <h3>1. Contact us</h3>
+          <p>
+            Send us a message on WhatsApp or email with:
+          </p>
+          <ul>
+            <li>Which medication you need</li>
+            <li>Your current symptoms / condition</li>
+            <li>Where you are staying in Bali</li>
+          </ul>
+          <p class="muted">
+            WhatsApp: <strong>+62 895-1802-3363</strong><br>
+            Email: <strong>support@balidoc.com</strong>
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>2. We check what’s possible</h3>
+          <p>
+            We coordinate with our partner pharmacy and, when needed, a doctor to:
+          </p>
+          <ul>
+            <li>Review your prescription (if required)</li>
+            <li>Confirm if the medication is legal and available</li>
+            <li>Offer safe alternatives if your exact product isn’t available</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>3. Pharmacy dispenses your medication</h3>
+          <p>
+            Once everything is clear, your medication is prepared and dispensed by our partner pharmacy in Denpasar.
+            Pickup or local delivery can be arranged according to pharmacy policy.
+          </p>
+          <p class="muted">
+            All medications are dispensed in Indonesia and are not exported.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT WE CAN DO -->
+    <section id="what-we-do">
+      <h2>What we can help you with</h2>
+      <p class="section-intro">
+        We focus on practical, everyday problems that tourists and expats face when they need medication in Indonesia.
+      </p>
+
+      <div class="two-column">
+        <div class="card">
+          <h3>Typical requests</h3>
+          <ul>
+            <li>Refills for ongoing medications (with a valid prescription)</li>
+            <li>Travel-related issues: stomach problems, infections, allergies</li>
+            <li>Short-term symptom relief when you are far from your usual doctor</li>
+            <li>Clarifying which products in Indonesia match the medication from your home country</li>
+          </ul>
+          <p>
+            We always work within Indonesian law and pharmacy standards, and prescription-only medicines still
+            require a prescription from a licensed doctor.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>What we don’t do</h3>
+          <ul>
+            <li>No controlled substances or narcotics</li>
+            <li>No medications banned or restricted by Indonesian law</li>
+            <li>No export of medicines outside Indonesia</li>
+            <li>No replacement for emergency services</li>
+          </ul>
+          <p class="muted">
+            In an emergency, always contact local emergency services or go to the nearest hospital immediately.
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Why people use Tourist Pharmacy</h3>
+        <ul class="fact-list">
+          <li>✅ You prefer one trusted point of contact instead of guessing which pharmacy to try.</li>
+          <li>✅ You want clear communication in English about what is possible.</li>
+          <li>✅ You want to be sure your medication comes from a licensed, inspected pharmacy.</li>
+        </ul>
+        <p>
+          We don’t try to replace your own doctor or specialist – we simply make it easier and safer to receive
+          medication while you are in Indonesia.
+        </p>
+      </div>
+    </section>
+
+    <!-- SAFETY -->
+    <section id="safety">
+      <h2>Safety, pharmacy & legal information</h2>
+      <p class="section-intro">
+        Behind the scenes, Tourist Pharmacy is built like a real pharmacy service, not “just a website”.
+      </p>
+
+      <div class="two-column">
+        <div class="card">
+          <h3>Pharmacy partner (Bali)</h3>
+          <p>
+            All medications arranged through Tourist Pharmacy are dispensed by:
+          </p>
+          <p class="muted">
+            <strong>Apotek Pharmacare Sidakarya (PharmaCare – Pharmacy Partner)</strong><br>
+            Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan,<br>
+            Kota Denpasar, Bali 80224, Indonesia.
+          </p>
+          <ul>
+            <li><strong>Pharmacy License (Izin Apotek) No.:</strong> 25032400306790002</li>
+            <li><strong>Licensing Authority:</strong> Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (DPMPTSP) Kota Denpasar</li>
+            <li><strong>Responsible Pharmacist:</strong> apt. Ayu Pradnya Paramita, S.Farm</li>
+            <li><strong>Pharmacist Registration (STR):</strong> YZ00001647709423</li>
+          </ul>
+          <p class="muted">
+            Medications are dispensed from this licensed pharmacy only and are not exported.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Who operates Tourist Pharmacy?</h3>
+          <p>
+            Tourist Pharmacy is operated by:
+          </p>
+          <p class="muted">
+            <strong>PT Sehat Investasi Digital</strong><br>
+            Plaza Mutiara, 8th floor<br>
+            Jl. Dr. Ide Anak Agung Gde Agung Kuningan Timur Kav. E.1.2 No. 1 &amp; 2<br>
+            Kuningan Timur, Kec. Setiabudi, Kota Adm. Jakarta Selatan,<br>
+            DKI Jakarta 12950, Indonesia<br>
+            Company Registration (NIB): 0609230031427
+          </p>
+          <p class="muted">
+            For full legal details and documentation, see our dedicated
+            <a href="about.html">About &amp; Legal page</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact us</h2>
+      <p class="section-intro">
+        The easiest way to get started is to send us a WhatsApp message with what you need.
+      </p>
+
+      <div class="card">
+        <p>
+          <strong>WhatsApp:</strong><br>
+          <a href="https://wa.me/6289518023363"
+             target="_blank"
+             rel="noopener"
+             class="btn-primary">
+            💬 Chat via WhatsApp (+62 895-1802-3363)
+          </a>
+        </p>
+        <p>
+          <strong>Email:</strong><br>
+          <a href="mailto:support@balidoc.com">support@balidoc.com</a>
+        </p>
+        <p class="muted">
+          We aim to respond as quickly as possible during normal daytime hours in Bali.
+        </p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    © <span id="year"></span> Tourist Pharmacy – Operated by PT Sehat Investasi Digital.
+    <div class="footer-links">
+      <a href="about.html">About &amp; Legal</a>
+      <!-- You can later add: <a href="privacy.html">Privacy</a> <a href="terms.html">Terms</a> -->
+    </div>
+  </div>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</footer>
+
+</body>
+</html>
