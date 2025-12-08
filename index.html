@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About & Legal – Tourist Pharmacy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --primary: #0b2840;
+      --accent: #d9a52f;
+      --primary-light: #e6f1f8;
+      --text: #222;
+      --muted: #666;
+      --bg: #f7fafc;
+      --white: #ffffff;
+      --max-width: 980px;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--primary);
+      color: var(--white);
+      padding: 20px 16px 24px;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .logo {
+      height: 40px;
+      width: 40px;
+      object-fit: contain;
+      border-radius: 999px;
+      background: var(--white);
+      padding: 3px;
+    }
+
+    .inline-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.9rem;
+      margin-left: 14px;
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+
+    .inline-links a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    main {
+      padding: 26px 0 36px;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 4px;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+      color: var(--primary);
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 18px 18px 16px;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.08);
+      margin-bottom: 16px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin-top: 6px;
+    }
+
+    .two-column {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .two-column {
+        grid-template-columns: 1.2fr 1.2fr;
+      }
+    }
+
+    footer {
+      border-top: 1px solid #e2e8f0;
+      padding: 14px 16px 20px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      background: #fdfdfd;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <nav>
+      <div class="brand">
+        <img src="logo.png" alt="Tourist Pharmacy logo" class="logo">
+        <span>Tourist Pharmacy</span>
+      </div>
+      <div class="inline-links">
+        <a href="index.html">Home</a>
+        <a href="#operator">Operator</a>
+        <a href="#pharmacy">Pharmacy</a>
+        <a href="#compliance">Compliance</a>
+      </div>
+    </nav>
+    <h1>About &amp; Legal Information</h1>
+    <p class="muted">
+      This page explains who operates Tourist Pharmacy, who our pharmacy partner is, and how we work within Indonesian law.
+    </p>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+
+    <section id="operator" class="card">
+      <h2>Service operator – PT Sehat Investasi Digital</h2>
+      <p>
+        Tourist Pharmacy is an online pharmacy support service operated by:
+      </p>
+      <p class="muted">
+        <strong>PT Sehat Investasi Digital</strong><br>
+        Plaza Mutiara, 8th floor<br>
+        Jl. Dr. Ide Anak Agung Gde Agung Kuningan Timur Kav. E.1.2 No. 1 &amp; 2<br>
+        Kuningan Timur, Kec. Setiabudi, Kota Adm. Jakarta Selatan,<br>
+        DKI Jakarta 12950, Indonesia<br>
+        Company Registration (NIB): 0609230031427
+      </p>
+      <p class="muted">
+        PT Sehat Investasi Digital is responsible for the Tourist Pharmacy website, communication with patients,
+        and coordination with healthcare providers and the partner pharmacy.
+      </p>
+    </section>
+
+    <section id="pharmacy" class="card">
+      <h2>Partner pharmacy – Apotek Pharmacare Sidakarya</h2>
+      <p>
+        All medications arranged through Tourist Pharmacy are dispensed by our licensed community pharmacy partner:
+      </p>
+      <p class="muted">
+        <strong>Apotek Pharmacare Sidakarya (PharmaCare – Pharmacy Partner)</strong><br>
+        Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan,<br>
+        Kota Denpasar, Bali 80224, Indonesia
+      </p>
+      <ul>
+        <li><strong>Pharmacy License (Izin Apotek) No.:</strong> 25032400306790002</li>
+        <li><strong>Licensing Authority:</strong> Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (DPMPTSP) Kota Denpasar</li>
+      </ul>
+      <p class="muted">
+        <strong>Responsible Pharmacist:</strong> apt. Ayu Pradnya Paramita, S.Farm<br>
+        <strong>Pharmacist Registration (STR):</strong> YZ00001647709423
+      </p>
+      <p class="muted">
+        All medicines are dispensed from Apotek Pharmacare Sidakarya’s licensed premises in Denpasar. Medications are not exported outside Indonesia.
+      </p>
+    </section>
+
+    <section id="compliance" class="card">
+      <h2>Professional &amp; legal framework</h2>
+      <div class="two-column">
+        <div>
+          <h3>Scope of our role</h3>
+          <ul>
+            <li>We provide coordination and communication between patients, doctors, and the pharmacy.</li>
+            <li>We help clarify which medications are available and legal in Indonesia.</li>
+            <li>We do not replace the clinical judgement of doctors or pharmacists.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Key principles</h3>
+          <ul>
+            <li>Prescription-only medicines require a valid prescription from a licensed doctor.</li>
+            <li>No controlled substances, narcotics, or prohibited drugs are supplied.</li>
+            <li>All dispensing and record-keeping are performed by the pharmacy partner.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="muted">
+        For privacy and terms of use information, please refer to our dedicated Privacy and Terms pages (to be
+        published alongside this site) or contact us at <strong>support@balidoc.com</strong>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Contact for regulatory or verification questions</h2>
+      <p>
+        If you represent a regulator, insurer, or verification service and need additional documentation or clarification,
+        please contact:
+      </p>
+      <p class="muted">
+        Email: <strong>support@balidoc.com</strong><br>
+        WhatsApp: <strong>+62 895-1802-3363</strong>
+      </p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    © <span id="year"></span> Tourist Pharmacy – Operated by PT Sehat Investasi Digital.
+    <div>
+      <a href="index.html">Back to homepage</a>
+    </div>
+  </div>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</footer>
+
+</body>
+</html>
