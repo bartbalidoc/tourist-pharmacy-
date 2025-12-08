@@ -6,46 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Tourist Pharmacy is an online pharmacy service that provides safe and convenient access and delivery of medication in Indonesia through a licensed local pharmacy partner.">
 
-  <!-- Simple favicon generated from brand colors -->
+  <!-- Favicon as inline SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%230b2840'/%3E%3Crect x='42' y='26' width='16' height='48' rx='3' fill='%23d9a52f'/%3E%3Crect x='26' y='42' width='48' height='16' rx='3' fill='%23d9a52f'/%3E%3C/svg%3E">
 
-  <!-- Schema.org Pharmacy structured data (fill TODOs later) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Pharmacy",
-    "name": "Tourist Pharmacy",
-    "url": "[TODO_FILL_WEBSITE_URL]",
-    "image": "[TODO_FILL_LOGO_URL]",
-    "telephone": "+62 895-1802-3363",
-    "email": "info@balidoc.com",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan",
-      "addressLocality": "Kota Denpasar",
-      "addressRegion": "Bali",
-      "postalCode": "80224",
-      "addressCountry": "ID"
-    },
-    "founder": {
-      "@type": "Organization",
-      "name": "PT Sehat Investasi Digital",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Plaza Mutiara, 8th floor, Jl. Dr. Ide Anak Agung Gde Agung Kuningan Timur Kav. E.1.2 No. 1 & 2",
-        "addressLocality": "Kota Adm. Jakarta Selatan",
-        "addressRegion": "DKI Jakarta",
-        "postalCode": "12950",
-        "addressCountry": "ID"
-      }
-    }
-  }
-  </script>
-
+  <!-- Main styles inline -->
   <style>
     :root {
-      --primary: #0b2840;       /* navy from logo */
-      --accent: #d9a52f;        /* gold from logo */
+      --primary: #0b2840;
+      --accent: #d9a52f;
       --primary-light: #e6f1f8;
       --text: #222;
       --muted: #666;
@@ -160,9 +128,13 @@
       font-size: 0.9rem;
     }
 
-    main { padding: 32px 0 40px; }
+    main {
+      padding: 32px 0 40px;
+    }
 
-    section { margin-bottom: 32px; }
+    section {
+      margin-bottom: 32px;
+    }
 
     section h2 {
       font-size: 1.4rem;
@@ -198,13 +170,21 @@
       margin-top: 8px;
     }
 
+    ol {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+
     .muted {
       color: var(--muted);
       font-size: 0.9rem;
     }
 
     .contact-box {
-      display: inline-block;
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
       padding: 10px 14px;
       border-radius: 999px;
       background: var(--primary-light);
@@ -226,8 +206,43 @@
       text-decoration: none;
     }
 
-    footer a:hover { text-decoration: underline; }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
+
+  <!-- Schema.org Pharmacy structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Pharmacy",
+    "name": "Tourist Pharmacy",
+    "url": "https://touristpharmacy.com/",
+    "image": "https://touristpharmacy.com/logo.png",
+    "telephone": "+62 895-1802-3363",
+    "email": "support@balidoc.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan",
+      "addressLocality": "Kota Denpasar",
+      "addressRegion": "Bali",
+      "postalCode": "80224",
+      "addressCountry": "ID"
+    },
+    "founder": {
+      "@type": "Organization",
+      "name": "PT Sehat Investasi Digital",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Plaza Mutiara, 8th floor, Jl. Dr. Ide Anak Agung Gde Agung Kuningan Timur Kav. E.1.2 No. 1 & 2",
+        "addressLocality": "Kota Adm. Jakarta Selatan",
+        "addressRegion": "DKI Jakarta",
+        "postalCode": "12950",
+        "addressCountry": "ID"
+      }
+    }
+  }
+  </script>
 </head>
 <body>
 
@@ -235,7 +250,7 @@
   <div class="container">
     <nav>
       <div class="brand">
-        <!-- Put logo.png in same folder as this file -->
+        <!-- Make sure logo.png exists in the repo root -->
         <img src="logo.png" alt="Tourist Pharmacy logo" class="logo">
         <span>Tourist Pharmacy</span>
       </div>
@@ -260,14 +275,19 @@
           We currently focus on tourists and residents in selected areas, with plans to expand nationwide.
         </p>
         <div class="contact-box">
-          WhatsApp: <strong>+62 895-1802-3363</strong> &nbsp;·&nbsp;
-          Email: <strong>info@balidoc.com</strong>
+          <a href="https://wa.me/6289518023363"
+             target="_blank"
+             rel="noopener"
+             style="display:inline-block;padding:6px 12px;border-radius:999px;background:#25D366;color:#ffffff;text-decoration:none;font-size:0.9rem;">
+            Chat via WhatsApp
+          </a>
+          <span>Email: <strong>support@balidoc.com</strong></span>
         </div>
       </div>
       <div class="hero-card">
         <strong>At a glance</strong>
         <ul>
-          <li>All medications dispensed by <strong>PharmaCare (Pharmacy Partner)</strong> at <strong>Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan, Kota Denpasar, Bali 80224</strong>.</li>
+          <li>All medications dispensed by <strong>Apotek Pharmacare Sidakarya (PharmaCare – Pharmacy Partner)</strong> at <strong>Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan, Kota Denpasar, Bali 80224</strong>.</li>
           <li>Valid prescription required for prescription-only medicines.</li>
           <li>No export of medications outside Indonesia.</li>
           <li>No controlled substances or prohibited drugs supplied.</li>
@@ -280,6 +300,7 @@
 <main>
   <div class="container">
 
+    <!-- WHO WE ARE -->
     <section id="who-we-are">
       <div class="two-column">
         <div class="card">
@@ -298,36 +319,40 @@
             Jl. Dr. Ide Anak Agung Gde Agung Kuningan Timur Kav. E.1.2 No. 1 &amp; 2<br>
             Kuningan Timur, Kec. Setiabudi, Kota Adm. Jakarta Selatan,<br>
             DKI Jakarta 12950, Indonesia<br>
-            Registration No.: [TODO_FILL_COMPANY_REG_NO]
+            Company Registration (NIB): 0609230031427
           </p>
           <p class="muted">
             We do not dispense medications ourselves. All dispensing is performed by our licensed partner pharmacy.
           </p>
         </div>
 
+        <!-- PARTNER PHARMACY -->
         <div id="partner-pharmacy" class="card">
           <h2>Our Partner Pharmacy</h2>
-          <p><strong>Pharmacy Name:</strong> PharmaCare (Pharmacy Partner)</p>
+          <p><strong>Pharmacy Name:</strong> Apotek Pharmacare Sidakarya (PharmaCare – Pharmacy Partner)</p>
           <p><strong>Address:</strong> Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan, Kota Denpasar, Bali 80224</p>
-          <p><strong>Pharmacy License No.:</strong> [TODO_FILL_PHARMACY_LICENSE_NO]</p>
-          <p><strong>Licensing Authority:</strong> [TODO_FILL_LICENSING_AUTHORITY]</p>
+
+          <p><strong>Pharmacy License (Izin Apotek) No.:</strong> 25032400306790002</p>
+          <p><strong>Licensing Authority:</strong> Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (DPMPTSP) Kota Denpasar</p>
+
           <p class="muted">
-            Responsible Pharmacist: [TODO_FILL_RESPONSIBLE_PHARMACIST]<br>
-            Registration No.: [TODO_FILL_PHARMACIST_REG_NO]
+            <strong>Responsible Pharmacist:</strong> apt. Ayu Pradnya Paramita, S.Farm<br>
+            <strong>Pharmacist Registration (STR):</strong> YZ00001647709423
           </p>
         </div>
       </div>
     </section>
 
+    <!-- HOW IT WORKS -->
     <section id="how-it-works">
       <div class="card">
         <h2>How Prescriptions Work</h2>
         <ul>
           <li>All prescription-only medications require a valid prescription from a licensed doctor.</li>
           <li>Prescriptions may be issued by Indonesian doctors or, where legally permitted, by doctors from other jurisdictions.</li>
-          <li>PharmaCare checks each prescription for completeness, safety, and appropriateness.</li>
+          <li>Apotek Pharmacare Sidakarya checks each prescription for completeness, safety, and appropriateness.</li>
           <li>We do not supply controlled substances or medications prohibited by Indonesian law.</li>
-          <li>Medications are dispensed from PharmaCare’s licensed premises and are not exported outside Indonesia.</li>
+          <li>Medications are dispensed from Apotek Pharmacare Sidakarya’s licensed premises and are not exported outside Indonesia.</li>
         </ul>
       </div>
 
@@ -338,17 +363,17 @@
           <li>
             <strong>Contact Us</strong><br>
             Send us a message via WhatsApp at <strong>+62 895-1802-3363</strong> or email us at
-            <strong>info@balidoc.com</strong> and tell us what medication you need and where you are staying.
+            <strong>support@balidoc.com</strong> and tell us what medication you need and where you are staying.
           </li>
           <li>
             <strong>Prescription &amp; Availability Check</strong><br>
             If the medication requires a prescription, we will ask you for a valid prescription from a licensed doctor.
-            PharmaCare will confirm availability and whether the medication can be dispensed legally.
+            Apotek Pharmacare Sidakarya will confirm availability and whether the medication can be dispensed legally.
           </li>
           <li>
             <strong>Dispensing &amp; Pickup / Local Delivery</strong><br>
-            Your medication is prepared and dispensed by PharmaCare at Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan,
-            Kota Denpasar, Bali 80224. Pickup or local delivery may be arranged according to pharmacy policy.
+            Your medication is prepared and dispensed by Apotek Pharmacare Sidakarya at Jl. Sidakarya No.92, Sidakarya,
+            Denpasar Selatan, Kota Denpasar, Bali 80224. Pickup or local delivery may be arranged according to pharmacy policy.
           </li>
         </ol>
         <p class="muted">
@@ -361,13 +386,14 @@
         <h2>Patient Safety &amp; Compliance</h2>
         <ul>
           <li>Only medications from approved, legal suppliers are dispensed.</li>
-          <li>All dispensing is done by licensed pharmacists at PharmaCare.</li>
+          <li>All dispensing is done by licensed pharmacists at Apotek Pharmacare Sidakarya.</li>
           <li>We comply with Indonesian regulations on pharmacy practice, prescriptions, and data protection.</li>
           <li>We do not promote or sell medications in ways that conflict with regulations of Indonesia or patients’ home countries.</li>
         </ul>
       </div>
     </section>
 
+    <!-- PRIVACY & TERMS SUMMARY -->
     <section id="privacy-terms">
       <div class="two-column">
         <div class="card">
@@ -378,22 +404,22 @@
           </p>
           <ul>
             <li>Communicate with you about your medication request;</li>
-            <li>Verify prescriptions and dispense medication through PharmaCare;</li>
+            <li>Verify prescriptions and dispense medication through Apotek Pharmacare Sidakarya;</li>
             <li>Maintain records required for legal and professional purposes.</li>
           </ul>
           <p class="muted">
             We share data only with parties involved in fulfilling your request and only as necessary.
             To request access, correction or deletion of your data (where permitted by law), contact
-            <strong>info@balidoc.com</strong>.
+            <strong>support@balidoc.com</strong>.
           </p>
         </div>
 
         <div class="card">
           <h2>Terms of Use</h2>
           <ul>
-            <li>You must provide accurate and complete information about your health and prescriptions.</li>
+            <li>You must provide accurate and complete information about your identity, health, and prescriptions.</li>
             <li>You may only use this service for lawful, personal purposes.</li>
-            <li>All medicines are dispensed within Indonesia by PharmaCare; we do not export medications.</li>
+            <li>All medicines are dispensed within Indonesia by Apotek Pharmacare Sidakarya; we do not export medications.</li>
             <li>PT Sehat Investasi Digital is not liable for misuse of medicines or for incomplete/incorrect information provided by users.</li>
           </ul>
           <p class="muted">
@@ -403,6 +429,7 @@
       </div>
     </section>
 
+    <!-- CONTACT -->
     <section id="contact">
       <div class="card">
         <h2>Contact Us</h2>
@@ -410,8 +437,14 @@
           For questions about medication, prescriptions, or how the service works, contact:
         </p>
         <p>
-          <strong>WhatsApp:</strong> +62 895-1802-3363<br>
-          <strong>Email:</strong> info@balidoc.com
+          <strong>WhatsApp:</strong>
+          <a href="https://wa.me/6289518023363"
+             target="_blank"
+             rel="noopener"
+             style="display:inline-block;padding:6px 12px;border-radius:999px;background:#25D366;color:#ffffff;text-decoration:none;font-size:0.9rem;">
+            Chat via WhatsApp (+62 895-1802-3363)
+          </a><br>
+          <strong>Email:</strong> support@balidoc.com
         </p>
         <p class="muted">
           Registered operator:<br>
