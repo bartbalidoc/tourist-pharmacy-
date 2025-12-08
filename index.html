@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <title>Tourist Pharmacy – Safe & Convenient Medication Access in Indonesia</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Tourist Pharmacy helps tourists, expats, and residents in Indonesia get safe, legal access to medication via a licensed local pharmacy partner in Bali.">
+  <meta name="description" content="Tourist Pharmacy helps tourists, expats, and residents in Indonesia get safe, legal access to medication through a licensed community pharmacy in Bali.">
 
   <!-- Favicon as inline SVG -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%230b2840'/%3E%3Crect x='42' y='26' width='16' height='48' rx='3' fill='%23d9a52f'/%3E%3Crect x='26' y='42' width='48' height='16' rx='3' fill='%23d9a52f'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%230b2840'/%3E%3Crect x='42' y='26' width='16' height='48' rx='3' fill='%23d9a52f'/%3E%3Crect x='26' y='42' width='48' height='16' rx='3' fill='%23d9a52f'/%3E%3C/svg%3E">
 
   <!-- Main styles inline -->
   <style>
@@ -51,6 +52,12 @@
       align-items: center;
       margin-bottom: 28px;
       gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand-link {
+      text-decoration: none;
+      color: inherit;
     }
 
     .brand {
@@ -70,6 +77,12 @@
       border-radius: 999px;
       background: var(--white);
       padding: 4px;
+    }
+
+    .inline-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .inline-links a {
@@ -226,16 +239,6 @@
       font-size: 0.9rem;
     }
 
-    .tag-pill {
-      display: inline-block;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: var(--primary-light);
-      font-size: 0.78rem;
-      color: var(--primary);
-      margin: 2px 4px 2px 0;
-    }
-
     .fact-list li {
       margin-bottom: 4px;
     }
@@ -304,16 +307,21 @@
 <header>
   <div class="container">
     <nav>
-      <div class="brand">
-        <img src="logo.png" alt="Tourist Pharmacy logo" class="logo">
-        <span>Tourist Pharmacy</span>
-      </div>
+      <a href="index.html" class="brand-link">
+        <div class="brand">
+          <img src="logo.png" alt="Tourist Pharmacy logo" class="logo">
+          <span>Tourist Pharmacy</span>
+        </div>
+      </a>
       <div class="inline-links">
+        <a href="index.html">Home</a>
         <a href="#how-it-works">How It Works</a>
         <a href="#what-we-do">What We Can Do</a>
         <a href="#safety">Safety</a>
         <a href="#contact">Contact</a>
-        <a href="about.html">About & Legal</a>
+        <a href="about.html">About &amp; Legal</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
       </div>
     </nav>
 
@@ -366,9 +374,7 @@
       <div class="three-column">
         <div class="card">
           <h3>1. Contact us</h3>
-          <p>
-            Send us a message on WhatsApp or email with:
-          </p>
+          <p>Send us a message on WhatsApp or email with:</p>
           <ul>
             <li>Which medication you need</li>
             <li>Your current symptoms / condition</li>
@@ -382,9 +388,7 @@
 
         <div class="card">
           <h3>2. We check what’s possible</h3>
-          <p>
-            We coordinate with our partner pharmacy and, when needed, a doctor to:
-          </p>
+          <p>We coordinate with our partner pharmacy and, when needed, a doctor to:</p>
           <ul>
             <li>Review your prescription (if required)</li>
             <li>Confirm if the medication is legal and available</li>
@@ -416,13 +420,13 @@
         <div class="card">
           <h3>Typical requests</h3>
           <ul>
-            <li>Refills for ongoing medications (with a valid prescription)</li>
-            <li>Travel-related issues: stomach problems, infections, allergies</li>
-            <li>Short-term symptom relief when you are far from your usual doctor</li>
-            <li>Clarifying which products in Indonesia match the medication from your home country</li>
+            <li>Refills for ongoing medications (with a valid prescription).</li>
+            <li>Travel-related issues: stomach problems, infections, allergies.</li>
+            <li>Short-term symptom relief when you are far from your usual doctor.</li>
+            <li>Clarifying which products in Indonesia match medication from your home country.</li>
           </ul>
           <p>
-            We always work within Indonesian law and pharmacy standards, and prescription-only medicines still
+            We always work within Indonesian law and pharmacy standards. Prescription-only medicines still
             require a prescription from a licensed doctor.
           </p>
         </div>
@@ -430,10 +434,10 @@
         <div class="card">
           <h3>What we don’t do</h3>
           <ul>
-            <li>No controlled substances or narcotics</li>
-            <li>No medications banned or restricted by Indonesian law</li>
-            <li>No export of medicines outside Indonesia</li>
-            <li>No replacement for emergency services</li>
+            <li>No controlled substances or narcotics.</li>
+            <li>No medications banned or restricted by Indonesian law.</li>
+            <li>No export of medicines outside Indonesia.</li>
+            <li>No replacement for emergency services.</li>
           </ul>
           <p class="muted">
             In an emergency, always contact local emergency services or go to the nearest hospital immediately.
@@ -444,18 +448,18 @@
       <div class="card">
         <h3>Why people use Tourist Pharmacy</h3>
         <ul class="fact-list">
-          <li>✅ You prefer one trusted point of contact instead of guessing which pharmacy to try.</li>
-          <li>✅ You want clear communication in English about what is possible.</li>
-          <li>✅ You want to be sure your medication comes from a licensed, inspected pharmacy.</li>
+          <li>✅ One trusted point of contact instead of guessing which pharmacy to try.</li>
+          <li>✅ Clear communication in English about what is possible.</li>
+          <li>✅ Confidence that medication comes from a licensed, inspected pharmacy.</li>
         </ul>
         <p>
-          We don’t try to replace your own doctor or specialist – we simply make it easier and safer to receive
+          We don’t replace your own doctor or specialist – we simply make it easier and safer to receive
           medication while you are in Indonesia.
         </p>
       </div>
     </section>
 
-    <!-- SAFETY -->
+    <!-- SAFETY / PHARMACY INFO -->
     <section id="safety">
       <h2>Safety, pharmacy & legal information</h2>
       <p class="section-intro">
@@ -465,13 +469,11 @@
       <div class="two-column">
         <div class="card">
           <h3>Pharmacy partner (Bali)</h3>
-          <p>
-            All medications arranged through Tourist Pharmacy are dispensed by:
-          </p>
+          <p>All medications arranged through Tourist Pharmacy are dispensed by:</p>
           <p class="muted">
             <strong>Apotek Pharmacare Sidakarya (PharmaCare – Pharmacy Partner)</strong><br>
             Jl. Sidakarya No.92, Sidakarya, Denpasar Selatan,<br>
-            Kota Denpasar, Bali 80224, Indonesia.
+            Kota Denpasar, Bali 80224, Indonesia
           </p>
           <ul>
             <li><strong>Pharmacy License (Izin Apotek) No.:</strong> 25032400306790002</li>
@@ -486,9 +488,7 @@
 
         <div class="card">
           <h3>Who operates Tourist Pharmacy?</h3>
-          <p>
-            Tourist Pharmacy is operated by:
-          </p>
+          <p>Tourist Pharmacy is operated by:</p>
           <p class="muted">
             <strong>PT Sehat Investasi Digital</strong><br>
             Plaza Mutiara, 8th floor<br>
@@ -539,8 +539,10 @@
   <div class="container">
     © <span id="year"></span> Tourist Pharmacy – Operated by PT Sehat Investasi Digital.
     <div class="footer-links">
+      <a href="index.html">Home</a>
       <a href="about.html">About &amp; Legal</a>
-      <!-- You can later add: <a href="privacy.html">Privacy</a> <a href="terms.html">Terms</a> -->
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
     </div>
   </div>
   <script>
