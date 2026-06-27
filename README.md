@@ -4,7 +4,9 @@
 > decision log) · [BRAND.md](BRAND.md) — logo system + colour/identity & rationale ·
 > [DEPLOY.md](DEPLOY.md) — go live (public, static) · [DEPLOY_REVIEW.md](DEPLOY_REVIEW.md) — the
 > login-gated review build on the droplet · **[UPDATING.md](UPDATING.md) — how to push changes &
-> redeploy (start here for everyday updates)**. *(All kept up to date as decisions are made.)*
+> redeploy (start here for everyday updates)** · [SERVICES.md](SERVICES.md) — every API/key & where it
+> goes (reusable for other projects; real values stay in gitignored `SECRETS.local.md`).
+> *(All kept up to date as decisions are made.)*
 
 > **Launch status: technically ready to go live.** 3,555 products; **99% priced** (Halodoc ×1.5,
 > live USD+IDR ranges) and **99% with NIE + manufacturer**. SEO (sitemap, robots, JSON-LD), pinned

@@ -21,6 +21,11 @@ content://*
 *.pharmacy.pdf
 /_sensitive/
 
-# API keys
+# API keys / secrets — never commit. Actual key VALUES live here (gitignored);
+# committed docs only ever reference the env-var NAMES.
 scripts/.gemini_key
 *.gemini_key
+*.local.md
+SECRETS.local.md
+.env.*
+!.env.example
