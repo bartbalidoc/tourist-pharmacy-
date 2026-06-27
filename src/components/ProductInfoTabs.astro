@@ -1,0 +1,72 @@
+---
+import Icon from './Icon.astro';
+import type { Product } from '../lib/products';
+interface Props { product: Product; }
+const { product } = Astro.props;
+
+const NIE_FALLBACK = 'Available on request — shown on the original product packaging';
+const FALLBACK = 'Available on request';
+
+// Accordion sections (Halodoc-style PDP info), built from existing data. First is open.
+const sections = [
+  product.description && { title: 'Description', rows: [['', product.description]] },
+  {
+    title: 'Composition & form',
+    rows: [
+      ['Composition', product.composition || FALLBACK],
+      ['Dosage form', product.dosage_form || FALLBACK],
+      ['Strength', product.strength || FALLBACK],
+      ['Packaging', product.packaging || FALLBACK],
+    ],
+  },
+  {
+    title: 'Regulatory & manufacturer',
+    rows: [
+      ['Marketing authorization (NIE)', product.nie || NIE_FALLBACK],
+      ['Category', product.category || FALLBACK],
+      ...(product.manufacturer ? [['Manufacturer', product.manufacturer]] : []),
+    ],
+  },
+  {
+    title: 'Expiry & safety',
+    rows: [
+      ['Expiry date', 'Shown on the original packaging; a photo is provided on dispensing (varies per batch).'],
+      ['Safe use', 'Prescription-only (obat keras). Use exactly as directed by your doctor and pharmacist.'],
+    ],
+  },
+].filter(Boolean) as { title: string; rows: string[][] }[];
+---
+<div class="info">
+  {sections.map((s, i) => (
+    <details class="info__sec" open={i === 0}>
+      <summary>
+        <span>{s.title}</span>
+        <span class="info__chev"><Icon name="chevron-down" size="1.1rem" /></span>
+      </summary>
+      <dl class="info__body">
+        {s.rows.map(([k, v]) => (
+          k ? <div class="info__row"><dt>{k}</dt><dd>{v}</dd></div>
+            : <p class="info__text">{v}</p>
+        ))}
+      </dl>
+    </details>
+  ))}
+</div>
+<style>
+  .info { border: 1px solid var(--c-cream-line); border-radius: var(--radius-lg); overflow: hidden; background: var(--c-surface); }
+  .info__sec + .info__sec { border-top: 1px solid var(--c-cream-line); }
+  .info__sec summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+    gap: var(--sp-3); padding: var(--sp-4) var(--sp-5); font-weight: 700; color: var(--c-ink);
+    font-family: var(--font-display);
+  }
+  .info__sec summary::-webkit-details-marker { display: none; }
+  .info__chev { color: var(--c-ink-faint); transition: transform var(--dur) var(--ease); display: grid; place-items: center; }
+  .info__sec[open] .info__chev { transform: rotate(180deg); }
+  .info__body { margin: 0; padding: 0 var(--sp-5) var(--sp-5); display: grid; gap: var(--sp-3); }
+  .info__row { display: grid; grid-template-columns: 13rem 1fr; gap: var(--sp-4); }
+  .info__row dt { font-weight: 700; color: var(--c-ink-soft); font-size: var(--fs-350); }
+  .info__row dd { margin: 0; color: var(--c-ink); }
+  .info__text { color: var(--c-ink); margin: 0; line-height: 1.6; }
+  @media (max-width: 600px) { .info__row { grid-template-columns: 1fr; gap: 2px; } .info__row dt { font-size: var(--fs-300); } }
+</style>

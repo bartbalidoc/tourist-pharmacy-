@@ -1,0 +1,104 @@
+---
+import type { Product } from '../lib/products';
+import PriceDisplay from './PriceDisplay.astro';
+import Icon from './Icon.astro';
+
+interface Props { product: Product; }
+const { product } = Astro.props;
+---
+
+<article class="pcard" data-category={product.category} data-name={product.name.toLowerCase()}>
+  <a class="pcard__link" href={product.href} aria-label={`View ${product.name}`}>
+    <div class="pcard__media">
+      <img src={product.image_url} alt={`${product.name} packaging`} loading="lazy" decoding="async" width="600" height="600" />
+      <span class="pcard__cat">{product.category}</span>
+      {product.controlled && <span class="pcard__ctrl"><Icon name="alert" size="0.8rem" /> Specialist</span>}
+    </div>
+    <div class="pcard__body">
+      <h3 class="pcard__name">{product.name}</h3>
+      <p class="pcard__meta">{product.dosage_form} · {product.strength}</p>
+      <p class:list={['pcard__stock', product.in_stock ? 'is-in' : 'is-out']}>
+        <span class="dot" aria-hidden="true"></span>
+        {product.in_stock ? 'In Stock' : 'Out of Stock'}
+      </p>
+      {!product.priceMissing && (
+        <div class="pcard__price">
+          <PriceDisplay priceMinIdr={product.price_min_idr} priceMaxIdr={product.price_max_idr}
+                        priceMissing={product.priceMissing} isRange={product.priceIsRange} size="sm" />
+        </div>
+      )}
+    </div>
+  </a>
+  <div class="pcard__foot">
+    <span class="pcard__rx"><Icon name="file-text" size="0.95rem" /> Prescription</span>
+    <span class="pcard__go">View <Icon name="arrow-right" size="0.9rem" /></span>
+  </div>
+</article>
+
+<style is:global>
+  /* Global so the catalog's client-rendered cards (built via innerHTML) are styled too. */
+  .pcard {
+    display: flex;
+    flex-direction: column;
+    background: var(--c-surface);
+    border: 1px solid var(--c-cream-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .pcard:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--c-clay); }
+
+  .pcard__link { display: block; text-decoration: none; color: inherit; }
+  .pcard__media { position: relative; aspect-ratio: 1 / 1; background: var(--c-paper-2); }
+  .pcard__media img { width: 100%; height: 100%; object-fit: cover; }
+  .pcard__ctrl {
+    position: absolute; top: var(--sp-3); right: var(--sp-3);
+    display: inline-flex; align-items: center; gap: 0.25rem;
+    background: var(--c-red-label); color: #fff;
+    font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+    padding: 0.28rem 0.55rem; border-radius: 999px;
+  }
+  .pcard__cat {
+    position: absolute;
+    top: var(--sp-3);
+    left: var(--sp-3);
+    background: color-mix(in srgb, var(--c-jungle) 90%, transparent);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+  }
+
+  .pcard__body { padding: var(--sp-4); display: grid; gap: var(--sp-2); }
+  .pcard__name { font-size: var(--fs-500); margin: 0; }
+  .pcard__meta { color: var(--c-ink-soft); font-size: var(--fs-300); margin: 0; }
+
+  .pcard__stock {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: var(--fs-300); font-weight: 700; margin: 0;
+  }
+  .pcard__stock .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .pcard__stock.is-in { color: var(--c-in-stock); }
+  .pcard__stock.is-in .dot { background: var(--c-in-stock); }
+  .pcard__stock.is-out { color: var(--c-out-stock); }
+  .pcard__stock.is-out .dot { background: var(--c-out-stock); }
+
+  .pcard__price { margin-top: var(--sp-1); }
+
+  .pcard__foot {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--sp-3) var(--sp-4);
+    border-top: 1px dashed var(--c-cream-line);
+    font-size: var(--fs-300);
+  }
+  .pcard__rx { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--c-red-label); font-weight: 700; }
+  .pcard__go { display: inline-flex; align-items: center; gap: 0.3rem; color: var(--c-terracotta-d); font-weight: 700; }
+  .pcard:hover .pcard__go { gap: 0.5rem; }
+</style>

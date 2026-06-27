@@ -1,0 +1,39 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  updated?: string;
+}
+const { title, description, updated } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="legal container container-narrow">
+    <header class="legal__head">
+      <p class="eyebrow">Legal</p>
+      <h1>{title}</h1>
+      {updated && <p class="legal__updated">Last updated: {updated}</p>}
+    </header>
+    <div class="legal__body">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal { padding-block: var(--sp-8); }
+  .legal__head { margin-bottom: var(--sp-6); }
+  .legal__head h1 { font-size: var(--fs-800); margin-top: var(--sp-2); }
+  .legal__updated { color: var(--c-ink-soft); font-size: var(--fs-300); margin-top: var(--sp-2); }
+
+  .legal__body :global(h2) { font-size: var(--fs-600); margin-top: var(--sp-6); margin-bottom: var(--sp-2); }
+  .legal__body :global(p) { margin-bottom: var(--sp-3); color: var(--c-ink); }
+  .legal__body :global(ul) { margin-bottom: var(--sp-3); display: grid; gap: var(--sp-1); }
+  .legal__body :global(.todo) {
+    background: var(--c-red-label-bg); border-left: 4px solid var(--c-brass);
+    padding: var(--sp-3) var(--sp-4); border-radius: var(--radius-sm);
+    font-style: italic; color: var(--c-ink-soft);
+  }
+</style>

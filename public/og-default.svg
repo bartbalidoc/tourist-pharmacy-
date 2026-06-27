@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <defs>
+    <radialGradient id="g" cx="88%" cy="-5%" r="85%">
+      <stop offset="0%" stop-color="#16365c" stop-opacity="0.10"/>
+      <stop offset="60%" stop-color="#16365c" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="og-globe"><circle cx="285" cy="300" r="120"/></clipPath>
+  </defs>
+  <!-- mark -->
+  <g transform="translate(0,15)">
+    <circle cx="285" cy="300" r="120" fill="#16365c"/>
+    <g clip-path="url(#og-globe)" stroke="#ffffff" stroke-opacity="0.16" stroke-width="2" fill="none">
+      <ellipse cx="285" cy="300" rx="46" ry="120"/><ellipse cx="285" cy="300" rx="90" ry="120"/>
+      <line x1="165" y1="300" x2="405" y2="300"/>
+    </g>
+    <g>
+      <rect x="255" y="246" width="60" height="168" rx="15" fill="#16365c"/>
+      <rect x="201" y="300" width="168" height="60" rx="15" fill="#16365c"/>
+      <rect x="263" y="254" width="44" height="152" rx="10" fill="#e3a52e"/>
+      <rect x="209" y="308" width="152" height="44" rx="10" fill="#e3a52e"/>
+    </g>
+  </g>
+  <text x="470" y="290" font-family="Georgia, serif" font-size="74" fill="#16365c" font-weight="700">Tourist Pharmacy</text>
+  <text x="472" y="352" font-family="Helvetica, Arial, sans-serif" font-size="33" fill="#4b596f">Your English-speaking pharmacy in Bali</text>
+  <text x="472" y="412" font-family="Helvetica, Arial, sans-serif" font-size="25" fill="#e3a52e" font-weight="700">Licensed · BPOM-compliant · Doctor-prescribed</text>
+</svg>

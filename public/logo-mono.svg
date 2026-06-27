@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Tourist Pharmacy">
+  <title>Tourist Pharmacy (one-colour navy)</title>
+  <defs>
+    <path id="tpm-top" d="M 84,300 A 216,216 0 0 1 516,300"/>
+    <path id="tpm-bot" d="M 88,300 A 212,212 0 0 0 512,300"/>
+    <clipPath id="tpm-globe"><circle cx="300" cy="300" r="150"/></clipPath>
+  </defs>
+  <circle cx="300" cy="300" r="285" fill="none" stroke="#16365c" stroke-width="9"/>
+  <g fill="#16365c" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="78" letter-spacing="4">
+    <text text-anchor="middle"><textPath href="#tpm-top" startOffset="50%">TOURIST</textPath></text>
+    <text text-anchor="middle"><textPath href="#tpm-bot" startOffset="50%">PHARMACY</textPath></text>
+  </g>
+  <circle cx="300" cy="300" r="150" fill="none" stroke="#16365c" stroke-width="6"/>
+  <g clip-path="url(#tpm-globe)" stroke="#16365c" stroke-opacity="0.55" stroke-width="3.4" fill="none" stroke-linecap="round">
+    <ellipse cx="300" cy="300" rx="52" ry="150"/>
+    <ellipse cx="300" cy="300" rx="106" ry="150"/>
+    <line x1="150" y1="300" x2="450" y2="300"/>
+  </g>
+  <g fill="#16365c">
+    <rect x="271" y="222" width="58" height="156" rx="13"/>
+    <rect x="222" y="271" width="156" height="58" rx="13"/>
+  </g>
+</svg>

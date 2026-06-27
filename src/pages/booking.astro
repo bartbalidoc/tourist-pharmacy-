@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Steps from '../components/Steps.astro';
+import { CALENDLY_URL, CONSULT_PRICE_USD, WHATSAPP, MARKET, waLink } from '../lib/site';
+const etaSet = !MARKET.deliveryEtaHours.startsWith('[');
+---
+
+<BaseLayout title="Book a Doctor Consultation"
+  description="Book a short consultation with a licensed doctor to get your prescription, then have your medicine dispensed and delivered in Bali.">
+  <section class="bk-hero">
+    <div class="container container-narrow">
+      <p class="eyebrow" data-bk-eyebrow>No prescription yet</p>
+      <h1 data-bk-title>Book a doctor consultation</h1>
+      <p class="bk-hero__lede" data-bk-lede>A short consult with a licensed doctor, then your prescription is issued straight to our pharmacy — dispensed and delivered in Bali.</p>
+      <Steps steps={["Consult", "Prescription", "Dispense", "Deliver"]} current={1} />
+    </div>
+  </section>
+
+  <div class="container container-narrow bk">
+    <!-- Step 1 -->
+    <section class="card bk__step">
+      <h2><span class="bk__n">1</span> Which medication do you need?</h2>
+      <p data-medication-hint class="bk__hint">Tell us what you need. Not sure of the exact name? Describe it and we'll help.</p>
+      <label class="fld">
+        <span>Medication</span>
+        <input type="text" id="medication" name="medication" data-medication-input placeholder="e.g. Amoxicillin 500mg" autocomplete="off" />
+      </label>
+    </section>
+
+    <!-- Step 2 -->
+    <section class="card bk__step">
+      <h2><span class="bk__n">2</span> Book your consultation</h2>
+      <p>Video call or WhatsApp · 10–15 min · <strong>USD {CONSULT_PRICE_USD}</strong> (included if you've already consulted via BaliDoc).</p>
+      {CALENDLY_URL.startsWith('[') ? (
+        <div class="bk__book">
+          <p class="bk__book-lead">Message us on WhatsApp to lock in a time that suits you — we reply fast.</p>
+          <a class="btn btn--whatsapp bk__book-cta" data-wa-book
+             href={waLink('Hi Tourist Pharmacy, I would like to book a doctor consultation.')}
+             target="_blank" rel="noopener"><Icon name="whatsapp" size="1.2rem" /> Book on WhatsApp</a>
+          <p class="bk__privacy"><span class="bk__lock"><Icon name="lock" size="0.95rem" /></span> Private consultation with a licensed doctor.</p>
+        </div>
+      ) : (
+        <div class="bk__calendly">
+          <div class="calendly-inline-widget" data-url={CALENDLY_URL} style="min-width:320px;height:680px;"></div>
+        </div>
+      )}
+    </section>
+
+    <!-- Step 3 -->
+    <section class="card bk__step">
+      <h2><span class="bk__n">3</span> Prescription, dispensing &amp; delivery</h2>
+      <p>After your consult, the doctor issues the prescription directly to our partner pharmacy. {MARKET.deliveryPromise}{etaSet ? `, within ${MARKET.deliveryEtaHours} hours` : ''}.</p>
+    </section>
+
+    <!-- Cross-link -->
+    <aside class="bk__cross">
+      <Icon name="upload" size="1.2rem" />
+      <div><strong>Already have a prescription?</strong><span>Skip the consult — upload it for pharmacist review.</span></div>
+      <a class="btn btn--ghost btn--sm" href="/prescription">Upload instead</a>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .bk-hero { padding-block: var(--sp-8) var(--sp-4); }
+  .bk-hero h1 { font-size: var(--fs-800); margin-block: var(--sp-3); }
+  .bk-hero__lede { font-size: var(--fs-500); color: var(--c-ink-soft); margin-bottom: var(--sp-6); }
+  .bk { display: grid; gap: var(--sp-5); padding-bottom: var(--sp-8); }
+  .bk__step { padding: var(--sp-6); }
+  .bk__step h2 { display: flex; align-items: center; gap: 0.6rem; font-size: var(--fs-600); margin-bottom: var(--sp-3); }
+  .bk__n { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--c-terracotta); color: #fff; font-size: var(--fs-400); flex: none; }
+  .bk__hint { color: var(--c-ink-soft); }
+  .fld { display: grid; gap: 0.4rem; max-width: 30rem; margin-top: var(--sp-3); }
+  .fld span { font-weight: 700; color: var(--c-ink-soft); font-size: var(--fs-300); }
+  .fld input { padding: 0.8rem 1rem; border: 1.5px solid var(--c-cream-line); border-radius: var(--radius); font: inherit; background: var(--c-surface); min-height: 48px; }
+  .fld input:focus-visible { outline: none; border-color: var(--c-terracotta); box-shadow: 0 0 0 4px var(--c-clay-2); }
+  .bk__book { display: grid; gap: var(--sp-3); justify-items: start; margin-top: var(--sp-4); padding: var(--sp-5); background: var(--c-clay-2); border: 1px solid var(--c-clay); border-radius: var(--radius-lg); }
+  .bk__book-lead { color: var(--c-ink); margin: 0; }
+  .bk__book-cta { font-size: var(--fs-500); }
+  .bk__privacy { display: flex; align-items: center; gap: 0.5rem; font-size: var(--fs-300); color: var(--c-ink-faint); margin: 0; }
+  .bk__lock { color: var(--c-in-stock); display: grid; place-items: center; }
+  .bk__cross { display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-5); background: var(--c-surface); border: 1px solid var(--c-cream-line); border-radius: var(--radius-lg); }
+  .bk__cross > :global(svg) { color: var(--c-terracotta-d); flex: none; }
+  .bk__cross strong { display: block; } .bk__cross span { font-size: var(--fs-300); color: var(--c-ink-soft); }
+  .bk__cross .btn { margin-left: auto; flex: none; }
+  @media (max-width: 560px) { .bk-hero h1 { font-size: var(--fs-700); } .bk__cross { flex-wrap: wrap; } .bk__cross .btn { margin-left: 0; } }
+</style>
+
+<script>
+  import { WHATSAPP } from '../lib/site';
+  const params = new URLSearchParams(window.location.search);
+  const input = document.querySelector<HTMLInputElement>('[data-medication-input]');
+  const hint = document.querySelector<HTMLElement>('[data-medication-hint]');
+  const prettify = (s: string) => s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()).trim();
+  const val = params.get('name') || (params.get('product') ? prettify(params.get('product')!) : '');
+  if (val && input) { input.value = val; if (hint) hint.textContent = "Pre-filled from the product you viewed — edit if needed."; }
+
+  // Controlled meds arrive with ?specialist=1 → reframe as a specialist consultation.
+  const specialist = params.get('specialist') === '1';
+  const consultLabel = specialist ? 'specialist (psychiatrist) consultation' : 'doctor consultation';
+  if (specialist) {
+    document.querySelector('[data-bk-eyebrow]')!.textContent = 'Controlled medicine';
+    document.querySelector('[data-bk-title]')!.textContent = 'Book a specialist consultation';
+    document.querySelector('[data-bk-lede]')!.textContent =
+      'This is a controlled medicine, so it requires a consultation with a licensed specialist (psychiatrist). They assess and, if appropriate, issue the prescription to our pharmacy.';
+  }
+
+  // Carry the medication (and any typed value) into the WhatsApp booking message.
+  const waBtn = document.querySelector<HTMLAnchorElement>('[data-wa-book]');
+  waBtn?.addEventListener('click', () => {
+    const med = (input?.value || '').trim();
+    const msg = `Hi Tourist Pharmacy, I'd like to book a ${consultLabel}` + (med ? ` for ${med}.` : '.');
+    waBtn.href = `${WHATSAPP.link}?text=${encodeURIComponent(msg)}`;
+  });
+</script>

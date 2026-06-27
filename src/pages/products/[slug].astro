@@ -1,0 +1,186 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import PriceDisplay from '../../components/PriceDisplay.astro';
+import ProductInfoTabs from '../../components/ProductInfoTabs.astro';
+import Rail from '../../components/Rail.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { products, getProduct, relatedProducts } from '../../lib/products';
+import { waLink, SITE, PHARMACY, MARKET } from '../../lib/site';
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const product = getProduct(slug!);
+if (!product) return Astro.redirect('/products');
+
+const qp = `?product=${product.slug}&name=${encodeURIComponent(product.name)}`;
+// Controlled meds route to a specialist (psychiatrist) consultation.
+const bookHref = product.controlled ? `/booking${qp}&specialist=1` : `/booking${qp}`;
+const waStock = waLink(`Hi Tourist Pharmacy, please notify me when ${product.name} is back in stock.`);
+const related = relatedProducts(product, 8);
+
+const metaParts = [product.strength, product.dosage_form].filter(Boolean).join(', ');
+const metaDesc = (product.description ||
+  `${product.name}${metaParts ? ` (${metaParts})` : ''}. Prescription-only medicine dispensed by a licensed BPOM-compliant pharmacy in Bali.`).slice(0, 160);
+
+const jsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org/', '@type': 'Product', name: product.name,
+  image: new URL(product.image_url, SITE.url).href, description: metaDesc,
+  category: product.category, sku: product.slug,
+  ...(product.manufacturer ? { brand: { '@type': 'Brand', name: product.manufacturer } } : {}),
+  ...(product.nie ? { productID: `NIE:${product.nie}` } : {}),
+};
+if (!product.priceMissing) {
+  jsonLd.offers = { '@type': 'AggregateOffer', priceCurrency: 'IDR',
+    lowPrice: product.price_min_idr, highPrice: product.price_max_idr,
+    availability: product.in_stock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+    seller: { '@type': 'Pharmacy', name: SITE.name } };
+}
+const badges = [product.dosage_form, product.strength].filter(Boolean);
+---
+
+<BaseLayout title={`${product.name} — Bali`} fullTitle={`${product.name} — Tourist Pharmacy Bali`}
+  description={metaDesc} ogImage={product.image_url} stickyCta={true}>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/products"><Icon name="chevron-right" size="0.9rem" class="flip" /> All medicines</a>
+    </nav>
+  </div>
+
+  <article class="pdp container">
+    <!-- LEFT: imagery -->
+    <div class="pdp__media">
+      <figure class="pdp__figure">
+        <img src={product.image_url} alt={`${product.name} — original product packaging`} width="600" height="600" decoding="async" />
+      </figure>
+      <p class="pdp__media-note"><Icon name="camera" size="0.95rem" /> Original packaging. Expiry photo provided on dispensing.</p>
+    </div>
+
+    <!-- RIGHT: buy box -->
+    <div class="pdp__buy">
+      <p class="eyebrow">{product.category}</p>
+      <h1 class="pdp__title">{product.name}</h1>
+      <div class="pdp__badges">
+        {product.controlled && <span class="chip-badge chip-badge--ctrl"><Icon name="alert" size="0.85rem" /> Controlled · specialist only</span>}
+        {badges.map((b) => <span class="chip-badge">{b}</span>)}
+      </div>
+      {product.description && <p class="pdp__desc">{product.description.slice(0, 180)}{product.description.length > 180 ? '…' : ''}</p>}
+
+      <div class="pdp__price">
+        <PriceDisplay priceMinIdr={product.price_min_idr} priceMaxIdr={product.price_max_idr}
+                      priceMissing={product.priceMissing} isRange={product.priceIsRange} size="lg" />
+        {!product.priceMissing && <p class="pdp__price-foot">{product.priceIsRange ? 'Indicative range. ' : ''}Live USD rate · final price confirmed at dispensing.</p>}
+      </div>
+
+      <p class:list={['pdp__stock', product.in_stock ? 'is-in' : 'is-out']}>
+        <span class="dot" aria-hidden="true"></span>
+        {product.in_stock ? (<span><strong>In stock</strong>{product.stock_note ? ` — ${product.stock_note}` : ''}</span>)
+          : (<span><strong>Out of stock</strong> — <a href={waStock} target="_blank" rel="noopener">notify me</a></span>)}
+      </p>
+
+      <!-- Prescription gate: BOTH paths (specialist routing for controlled meds) -->
+      <div class:list={['gate', { 'gate--ctrl': product.controlled }]}>
+        {product.controlled ? (
+          <p class="gate__notice gate__notice--ctrl"><Icon name="alert" size="1.05rem" /> Controlled medicine — available <strong>only via a specialist (psychiatrist) consultation</strong>.</p>
+        ) : (
+          <p class="gate__notice"><Icon name="alert" size="1.05rem" /> Prescription-only (obat keras) — a doctor's prescription is required.</p>
+        )}
+        <a class="btn btn--primary gate__primary" href={bookHref}>
+          {product.controlled ? 'Book a specialist consultation' : 'Get a Prescription · Book Consult'} <Icon name="arrow-right" />
+        </a>
+        <a class="gate__secondary" href={`/prescription${qp}`}><Icon name="upload" size="1.05rem" /> Already have a prescription? Upload it</a>
+      </div>
+
+      <!-- Trust beside the CTA (CRO) -->
+      <ul class="pdp__trust">
+        <li><Icon name="shield-check" size="1rem" /> BPOM-licensed pharmacy</li>
+        <li><Icon name="heart-pulse" size="1rem" /> Dispensed by {PHARMACY.name.split('(')[0].trim()}</li>
+        <li><Icon name="truck" size="1rem" /> {MARKET.deliveryPromise}</li>
+      </ul>
+    </div>
+  </article>
+
+  <!-- Info accordion -->
+  <section class="section pdp-info">
+    <div class="container container-narrow">
+      <h2 class="pdp-info__h">Product information</h2>
+      <ProductInfoTabs product={product} />
+    </div>
+  </section>
+
+  <!-- Related -->
+  {related.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <Rail eyebrow="You might also need" title="Related medicines" viewAllHref="/products">
+          {related.map((p) => <ProductCard product={p} />)}
+        </Rail>
+      </div>
+    </section>
+  )}
+
+  <div class="pdp-spacer" aria-hidden="true"></div>
+
+  <!-- Sticky mobile CTA (CRO: +conv, -abandonment) -->
+  <div class="pdp-sticky">
+    <div class="pdp-sticky__price"><PriceDisplay priceMinIdr={product.price_min_idr} priceMaxIdr={product.price_max_idr} priceMissing={product.priceMissing} isRange={product.priceIsRange} size="sm" /></div>
+    <a class="btn btn--primary pdp-sticky__cta" href={bookHref}>{product.controlled ? 'Specialist consult' : 'Get prescription'} <Icon name="arrow-right" /></a>
+  </div>
+</BaseLayout>
+
+<style>
+  .crumbs { padding-block: var(--sp-5) 0; }
+  .crumbs a { display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 600; text-decoration: none; color: var(--c-ink-soft); }
+  .crumbs a:hover { color: var(--c-terracotta-d); }
+
+  .pdp { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: var(--sp-7); padding-block: var(--sp-5) var(--sp-7); align-items: start; }
+  .pdp__media { position: sticky; top: 90px; }
+  .pdp__figure { margin: 0; }
+  .pdp__figure img { width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--c-cream-line); background: var(--c-surface); box-shadow: var(--shadow-sm); }
+  .pdp__media-note { display: flex; align-items: center; gap: 0.4rem; margin-top: var(--sp-2); font-size: var(--fs-300); color: var(--c-ink-faint); }
+
+  .pdp__title { margin: var(--sp-1) 0 var(--sp-3); font-size: var(--fs-800); }
+  .pdp__badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: var(--sp-3); }
+  .chip-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: var(--fs-300); font-weight: 700; color: var(--c-terracotta-d); background: var(--c-clay-2); padding: 0.25rem 0.65rem; border-radius: 999px; }
+  .chip-badge--ctrl { color: #fff; background: var(--c-red-label); }
+  .gate--ctrl { background: var(--c-red-label-bg); border-color: color-mix(in srgb, var(--c-red-label) 25%, transparent); }
+  .gate__notice--ctrl { color: var(--c-red-label); }
+  .pdp__desc { color: var(--c-ink-soft); margin-bottom: var(--sp-4); }
+  .pdp__price { background: var(--c-surface); border: 1px solid var(--c-cream-line); border-radius: var(--radius); padding: var(--sp-5); margin-bottom: var(--sp-4); }
+  .pdp__price-foot { margin-top: var(--sp-3); font-size: var(--fs-300); color: var(--c-ink-faint); }
+
+  .pdp__stock { display: flex; align-items: center; gap: 0.5rem; margin-bottom: var(--sp-4); }
+  .pdp__stock .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .pdp__stock.is-in { color: var(--c-in-stock); } .pdp__stock.is-in .dot { background: var(--c-in-stock); }
+  .pdp__stock.is-out { color: var(--c-out-stock); } .pdp__stock.is-out .dot { background: var(--c-out-stock); }
+
+  .gate { display: grid; gap: var(--sp-3); padding: var(--sp-5); background: var(--c-clay-2); border: 1px solid var(--c-clay); border-radius: var(--radius-lg); }
+  .gate__notice { display: flex; align-items: center; gap: 0.5rem; font-size: var(--fs-350); font-weight: 600; color: var(--c-red-label); margin: 0; }
+  .gate__primary { width: 100%; justify-content: center; font-size: var(--fs-500); }
+  .gate__secondary { display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem; font-weight: 700; color: var(--c-terracotta-d); text-decoration: none; }
+  .gate__secondary:hover { color: var(--c-terracotta); }
+
+  .pdp__trust { list-style: none; padding: 0; margin: var(--sp-4) 0 0; display: grid; gap: 0.5rem; }
+  .pdp__trust li { display: flex; align-items: center; gap: 0.5rem; font-size: var(--fs-350); color: var(--c-ink-soft); }
+  .pdp__trust :global(svg) { color: var(--c-in-stock); flex: none; }
+
+  .pdp-info__h { font-size: var(--fs-700); margin-bottom: var(--sp-4); }
+
+  /* Sticky mobile CTA */
+  .pdp-sticky { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 55; align-items: center; gap: var(--sp-4); padding: var(--sp-3) var(--sp-4); background: var(--c-surface); border-top: 1px solid var(--c-cream-line); box-shadow: 0 -6px 20px rgba(15,31,36,0.08); padding-bottom: calc(var(--sp-3) + env(safe-area-inset-bottom)); }
+  .pdp-sticky__price { flex: 1; min-width: 0; }
+  .pdp-sticky__cta { flex: none; }
+
+  .pdp-spacer { display: none; }
+  @media (max-width: 900px) {
+    .pdp { grid-template-columns: 1fr; gap: var(--sp-5); }
+    .pdp__media { position: static; }
+    .pdp-sticky { display: flex; }
+    .pdp-spacer { display: block; height: 76px; }
+  }
+</style>

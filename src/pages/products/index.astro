@@ -1,0 +1,226 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import Icon from '../../components/Icon.astro';
+import { products } from '../../lib/products';
+import { CATEGORY_GROUPS } from '../../lib/site';
+import { groupCounts } from '../../lib/products';
+
+const PAGE_SIZE = 48;
+const firstPage = products.slice(0, PAGE_SIZE);
+const total = products.length;
+---
+
+<BaseLayout
+  title="Browse Medicines"
+  description={`Browse ${total}+ licensed, BPOM-compliant medicines available in Bali. Filter by condition and search, then book a consult or upload your prescription.`}
+>
+  <section class="cat-top">
+    <div class="container">
+      <p class="eyebrow">Medicines</p>
+      <h1>Browse {total.toLocaleString('en-US')} licensed medicines</h1>
+      <p class="cat-top__lede">Search or filter by condition, then book a doctor consult — or upload a prescription you already have.</p>
+    </div>
+  </section>
+
+  <div class="container cat">
+    <!-- Mobile filter trigger + sort -->
+    <div class="cat__bar">
+      <button class="cat__filterbtn" data-open-filters><Icon name="filter" size="1.05rem" /> Filters</button>
+      <p class="cat__count" data-count aria-live="polite">{total.toLocaleString('en-US')} products</p>
+      <label class="cat__sort">
+        <span class="visually-hidden">Sort</span>
+        <select data-sort>
+          <option value="relevance">Sort: Featured</option>
+          <option value="name">Name A–Z</option>
+          <option value="stock">In stock first</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="cat__layout">
+      <!-- SIDEBAR FILTERS -->
+      <aside class="filters" data-filters aria-label="Filters">
+        <div class="filters__head">
+          <strong>Filters</strong>
+          <button class="filters__close" data-close-filters aria-label="Close filters"><Icon name="close" size="1.1rem" /></button>
+        </div>
+        <div class="filters__group">
+          <h2 class="filters__h">Condition</h2>
+          <ul class="filters__list">
+            <li><button class="filters__opt is-active" data-cat="all">All medicines <span>{total.toLocaleString('en-US')}</span></button></li>
+            {CATEGORY_GROUPS.map((g) => (
+              <li><button class="filters__opt" data-cat={g.slug}>{g.label} <span>{(groupCounts[g.slug] ?? 0).toLocaleString('en-US')}</span></button></li>
+            ))}
+          </ul>
+        </div>
+        <div class="filters__group">
+          <h2 class="filters__h">Availability</h2>
+          <label class="filters__check"><input type="checkbox" data-instock /> In stock only</label>
+        </div>
+      </aside>
+      <div class="filters__scrim" data-scrim hidden></div>
+
+      <!-- RESULTS -->
+      <section class="results">
+        <div class="grid" data-grid>
+          {firstPage.map((p) => <ProductCard product={p} />)}
+        </div>
+        <div class="cat-empty" data-empty hidden>
+          <p>No medicines match your search.</p>
+          <div class="cat-empty__acts">
+            <button class="btn btn--ghost btn--sm" data-clear>Clear filters</button>
+            <a class="btn btn--primary btn--sm" data-request-link href="/request"><Icon name="whatsapp" size="1rem" /> Request this medicine</a>
+          </div>
+        </div>
+        <div class="cat-more"><button class="btn btn--ghost" data-more hidden>Load more</button></div>
+      </section>
+    </div>
+
+    <aside class="cat-req">
+      <span class="cat-req__ic"><Icon name="search" size="1.25rem" /></span>
+      <div><strong>Can't find your medicine?</strong><span>Tell us what you need — we'll search our full supply and reply on WhatsApp.</span></div>
+      <a class="btn btn--primary btn--sm" href="/request">Request a medicine</a>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .cat-top { padding-block: var(--sp-7) var(--sp-4); }
+  .cat-top__lede { max-width: 60ch; color: var(--c-ink-soft); margin-top: var(--sp-2); font-size: var(--fs-500); }
+
+  .cat__bar { position: sticky; top: 72px; z-index: 20; display: flex; align-items: center; gap: var(--sp-4); padding-block: var(--sp-3); background: color-mix(in srgb, var(--c-paper) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--c-cream-line); }
+  .cat__filterbtn { display: none; align-items: center; gap: 0.4rem; font: inherit; font-weight: 700; padding: 0.5rem 0.9rem; border: 1.5px solid var(--c-cream-line); border-radius: 999px; background: var(--c-surface); cursor: pointer; }
+  .cat__count { color: var(--c-ink-soft); font-size: var(--fs-350); margin-right: auto; }
+  .cat__sort select { font: inherit; font-weight: 600; padding: 0.5rem 0.9rem; border: 1.5px solid var(--c-cream-line); border-radius: 999px; background: var(--c-surface); color: var(--c-ink); cursor: pointer; }
+
+  .cat__layout { display: grid; grid-template-columns: 248px 1fr; gap: var(--sp-6); padding-block: var(--sp-5) var(--sp-8); align-items: start; }
+  .filters { position: sticky; top: 128px; display: grid; gap: var(--sp-5); }
+  .filters__head { display: none; align-items: center; justify-content: space-between; }
+  .filters__close { background: none; border: 0; cursor: pointer; color: var(--c-ink); }
+  .filters__h { font-size: var(--fs-350); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--c-ink-faint); margin-bottom: var(--sp-3); }
+  .filters__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
+  .filters__opt { display: flex; justify-content: space-between; gap: var(--sp-3); width: 100%; text-align: left; font: inherit; padding: 0.5rem 0.7rem; border: 0; border-radius: var(--radius-sm); background: none; color: var(--c-ink); cursor: pointer; font-size: var(--fs-350); }
+  .filters__opt span { color: var(--c-ink-faint); font-size: var(--fs-300); }
+  .filters__opt:hover { background: var(--c-paper-2); }
+  .filters__opt.is-active { background: var(--c-clay-2); color: var(--c-terracotta-d); font-weight: 700; }
+  .filters__opt.is-active span { color: var(--c-terracotta-d); }
+  .filters__check { display: flex; align-items: center; gap: 0.5rem; font-size: var(--fs-350); cursor: pointer; }
+  .filters__check input { width: 18px; height: 18px; accent-color: var(--c-terracotta); }
+  .filters__scrim { position: fixed; inset: 0; background: rgba(15,31,36,0.5); z-index: 60; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--sp-5); }
+  .cat-empty { text-align: center; padding: var(--sp-7); color: var(--c-ink-soft); }
+  .cat-empty__acts { display: flex; gap: var(--sp-3); justify-content: center; flex-wrap: wrap; margin-top: var(--sp-3); }
+  .cat-req { display: flex; align-items: center; gap: var(--sp-4); margin: var(--sp-6) 0 var(--sp-8); padding: var(--sp-5); background: var(--c-clay-2); border: 1px solid var(--c-clay); border-radius: var(--radius-lg); }
+  .cat-req__ic { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--c-surface); color: var(--c-terracotta-d); flex: none; }
+  .cat-req strong { display: block; } .cat-req span { font-size: var(--fs-300); color: var(--c-ink-soft); }
+  .cat-req .btn { margin-left: auto; flex: none; }
+  @media (max-width: 560px) { .cat-req { flex-wrap: wrap; } .cat-req .btn { margin-left: 0; } }
+  .cat-more { text-align: center; margin-top: var(--sp-7); }
+  .linklike { background: none; border: 0; color: var(--c-terracotta-d); font: inherit; font-weight: 700; cursor: pointer; text-decoration: underline; }
+
+  @media (max-width: 860px) {
+    .cat__layout { grid-template-columns: 1fr; }
+    .cat__filterbtn { display: inline-flex; }
+    .filters {
+      position: fixed; top: 0; left: 0; bottom: 0; width: min(86vw, 340px); z-index: 70;
+      background: var(--c-surface); padding: var(--sp-5); overflow-y: auto;
+      box-shadow: var(--shadow-xl); transform: translateX(-100%); transition: transform var(--dur) var(--ease);
+      grid-auto-rows: max-content;
+    }
+    .filters.is-open { transform: translateX(0); }
+    .filters__head { display: flex; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--sp-4); }
+  }
+</style>
+
+<script>
+  type Entry = { s: string; n: string; c: string; gr: string; f: string; g: string; k: 0 | 1; i: string; x?: 0 | 1 };
+  const PAGE = 48;
+  const ALERT = '<svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>';
+
+  const grid = document.querySelector<HTMLElement>('[data-grid]');
+  const countEl = document.querySelector<HTMLElement>('[data-count]');
+  const emptyEl = document.querySelector<HTMLElement>('[data-empty]');
+  const moreBtn = document.querySelector<HTMLButtonElement>('[data-more]');
+  const sortSel = document.querySelector<HTMLSelectElement>('[data-sort]');
+  const instock = document.querySelector<HTMLInputElement>('[data-instock]');
+  const opts = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-cat]'));
+  const filtersEl = document.querySelector<HTMLElement>('[data-filters]');
+  const scrim = document.querySelector<HTMLElement>('[data-scrim]');
+  const clearBtn = document.querySelector<HTMLButtonElement>('[data-clear]');
+  const reqLink = document.querySelector<HTMLAnchorElement>('[data-request-link]');
+
+  let all: Entry[] = [];
+  let filtered: Entry[] = [];
+  let shown = 0, ready = false;
+  let cat = 'all', q = '', stockOnly = false, sort = 'relevance';
+
+  const params = new URLSearchParams(location.search);
+  cat = params.get('cat') || 'all';
+  q = (params.get('q') || '').trim().toLowerCase();
+
+  const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  function card(e: Entry): string {
+    const meta = [e.f, e.g].filter(Boolean).join(' · ');
+    const sc = e.k ? 'is-in' : 'is-out'; const st = e.k ? 'In Stock' : 'Out of Stock';
+    return `<article class="pcard"><a class="pcard__link" href="/products/${encodeURIComponent(e.s)}" aria-label="View ${esc(e.n)}">
+      <div class="pcard__media"><img src="${esc(e.i)}" alt="${esc(e.n)} packaging" loading="lazy" decoding="async" width="600" height="600"><span class="pcard__cat">${esc(e.c)}</span>${e.x ? `<span class="pcard__ctrl">${ALERT} Specialist</span>` : ''}</div>
+      <div class="pcard__body"><h3 class="pcard__name">${esc(e.n)}</h3>${meta ? `<p class="pcard__meta">${esc(meta)}</p>` : ''}
+      <p class="pcard__stock ${sc}"><span class="dot"></span>${st}</p></div></a>
+      <div class="pcard__foot"><span class="pcard__rx"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5"/><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M9 13h6M9 17h6"/></svg> Prescription</span>
+      <span class="pcard__go">View <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span></div></article>`;
+  }
+
+  function apply() {
+    filtered = all.filter((e) => {
+      const mc = cat === 'all' || e.gr === cat;
+      const mq = !q || e.n.toLowerCase().includes(q) || e.c.toLowerCase().includes(q);
+      const ms = !stockOnly || e.k === 1;
+      return mc && mq && ms;
+    });
+    if (sort === 'name') filtered.sort((a, b) => a.n.localeCompare(b.n));
+    else if (sort === 'stock') filtered.sort((a, b) => b.k - a.k);
+    if (reqLink) reqLink.href = q ? `/request?q=${encodeURIComponent(q)}` : '/request';
+    shown = 0; if (grid) grid.innerHTML = ''; renderMore();
+  }
+  function renderMore() {
+    if (!grid) return;
+    const next = filtered.slice(shown, shown + PAGE);
+    grid.insertAdjacentHTML('beforeend', next.map(card).join(''));
+    shown += next.length;
+    if (countEl) countEl.textContent = `${filtered.length.toLocaleString('en-US')} product${filtered.length === 1 ? '' : 's'}`;
+    if (emptyEl) emptyEl.hidden = filtered.length !== 0;
+    if (moreBtn) moreBtn.hidden = shown >= filtered.length;
+  }
+  function syncUrl() {
+    const p = new URLSearchParams();
+    if (cat !== 'all') p.set('cat', cat);
+    if (q) p.set('q', q);
+    history.replaceState(null, '', p.toString() ? `?${p}` : location.pathname);
+  }
+  function setCat(c: string) {
+    cat = c; opts.forEach((o) => o.classList.toggle('is-active', o.dataset.cat === c));
+    if (ready) { apply(); syncUrl(); } closeFilters();
+  }
+
+  function openFilters() { filtersEl?.classList.add('is-open'); if (scrim) scrim.hidden = false; }
+  function closeFilters() { filtersEl?.classList.remove('is-open'); if (scrim) scrim.hidden = true; }
+  document.querySelector('[data-open-filters]')?.addEventListener('click', openFilters);
+  document.querySelector('[data-close-filters]')?.addEventListener('click', closeFilters);
+  scrim?.addEventListener('click', closeFilters);
+
+  opts.forEach((o) => o.addEventListener('click', () => setCat(o.dataset.cat || 'all')));
+  sortSel?.addEventListener('change', () => { sort = sortSel.value; if (ready) apply(); });
+  instock?.addEventListener('change', () => { stockOnly = !!instock.checked; if (ready) apply(); });
+  moreBtn?.addEventListener('click', renderMore);
+  clearBtn?.addEventListener('click', () => { q = ''; stockOnly = false; if (instock) instock.checked = false; setCat('all'); });
+
+  // also react to the header search submitting ?q= (already in URL on load)
+  fetch('/search-index.json', { cache: 'force-cache' }).then((r) => r.json()).then((data: Entry[]) => {
+    all = data; ready = true;
+    opts.forEach((o) => o.classList.toggle('is-active', o.dataset.cat === cat));
+    apply();
+  }).catch(() => { if (moreBtn) moreBtn.hidden = true; });
+</script>

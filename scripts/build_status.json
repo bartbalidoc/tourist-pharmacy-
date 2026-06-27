@@ -1,0 +1,73 @@
+{
+  "title": "Tourist Pharmacy — About · Controlled meds · Requests",
+  "subtitle": "Operator-led About, specialist-only meds, manual request flow",
+  "tasks": [
+    {
+      "id": "config",
+      "name": "Config: BaliDoc + HIDE_CONTROLLED",
+      "status": "done",
+      "detail": "BaliDoc + HIDE_CONTROLLED"
+    },
+    {
+      "id": "classify",
+      "name": "Flag controlled/psychiatric meds",
+      "status": "done",
+      "detail": "46 controlled flagged"
+    },
+    {
+      "id": "datalayer",
+      "name": "Data layer: controlled field + hide logic",
+      "status": "done",
+      "detail": "controlled field + index x + visible/hide logic"
+    },
+    {
+      "id": "controlledux",
+      "name": "Controlled UX: badge + specialist gate",
+      "status": "done",
+      "detail": "Badge + specialist gate + booking copy"
+    },
+    {
+      "id": "request",
+      "name": "Manual request flow (/request + form)",
+      "status": "done",
+      "detail": "MedicineRequest + /request"
+    },
+    {
+      "id": "entrypoints",
+      "name": "No-results entry points + footer",
+      "status": "done",
+      "detail": "Search/catalog no-results + footer"
+    },
+    {
+      "id": "about",
+      "name": "About repositioning",
+      "status": "done",
+      "detail": "Operator-led + BaliDoc + subtle compliance"
+    },
+    {
+      "id": "qa",
+      "name": "Build + QA (hide on/off)",
+      "status": "done",
+      "detail": "Both HIDE states verified; About + request + controlled live"
+    }
+  ],
+  "log": [
+    "Plan approved: About reposition + controlled-med classification + manual request flow.",
+    "[12:01:53] config: done — BaliDoc + HIDE_CONTROLLED",
+    "[12:01:54] classify: active",
+    "[12:03:27] classify: done — 46 controlled flagged",
+    "[12:03:27] datalayer: done — controlled field + index x + visible/hide logic",
+    "[12:03:27] controlledux: active",
+    "[12:09:17] controlledux: done — Badge + specialist gate + booking copy",
+    "[12:10:09] request: active",
+    "[12:10:09] Building manual medicine-request flow (/request + intake → WhatsApp)…",
+    "[12:15:07] request: done — MedicineRequest + /request",
+    "[12:15:07] entrypoints: done — Search/catalog no-results + footer",
+    "[12:15:07] about: active",
+    "[12:15:07] Repositioning About: operator-led + BaliDoc + subtle compliance…",
+    "[12:16:21] about: done — Operator-led + BaliDoc + subtle compliance",
+    "[12:16:21] qa: active",
+    "[12:18:41] qa: done — Both HIDE states verified; About + request + controlled live",
+    "[12:18:41] ✅ Done: operator-led About, controlled-med labels + hide switch, /request flow."
+  ]
+}

@@ -1,0 +1,26 @@
+# build output
+dist/
+# dependencies
+node_modules/
+# generated types
+.astro/
+# environment
+.env
+.env.production
+# logs
+npm-debug.log*
+# macOS
+.DS_Store
+
+# SENSITIVE source documents — never commit or publish.
+# Raw BaliPharma export + pharmacy compliance PDFs. Used to generate site data
+# but must stay out of version control and out of the public build.
+products_export_*.csv
+content%3A*
+content://*
+*.pharmacy.pdf
+/_sensitive/
+
+# API keys
+scripts/.gemini_key
+*.gemini_key

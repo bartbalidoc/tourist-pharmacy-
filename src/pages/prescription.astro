@@ -1,0 +1,71 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Steps from '../components/Steps.astro';
+import PrescriptionUpload from '../components/PrescriptionUpload.astro';
+import TrustBadges from '../components/TrustBadges.astro';
+import { MARKET } from '../lib/site';
+---
+
+<BaseLayout title="Upload Your Prescription"
+  description="Already have a prescription? Upload it for our licensed pharmacist to review, then we dispense and deliver your medicine in Bali.">
+  <section class="rx-hero">
+    <div class="container container-narrow">
+      <p class="eyebrow">Already have a prescription</p>
+      <h1>Upload your prescription</h1>
+      <p class="rx-hero__lede">Send us your existing prescription. Our licensed pharmacist reviews it, then we dispense and deliver your medicine in Bali — no doctor consult needed.</p>
+      <Steps steps={["Upload", "Pharmacist review", "Dispense & deliver"]} current={1} />
+    </div>
+  </section>
+
+  <div class="container container-narrow rx">
+    <section class="card rx__card">
+      <PrescriptionUpload />
+    </section>
+
+    <!-- What happens next -->
+    <section class="rx__next">
+      <h2>What happens next</h2>
+      <ol class="rx__steps">
+        <li><span class="rx__ic"><Icon name="file-text" size="1.1rem" /></span><div><strong>We review it</strong><span>A licensed pharmacist checks your prescription is valid and in stock.</span></div></li>
+        <li><span class="rx__ic"><Icon name="shield-check" size="1.1rem" /></span><div><strong>We confirm on WhatsApp</strong><span>We message you with the price, stock and any questions.</span></div></li>
+        <li><span class="rx__ic"><Icon name="truck" size="1.1rem" /></span><div><strong>Dispense &amp; deliver</strong><span>{MARKET.deliveryPromise} — pickup or local Bali delivery.</span></div></li>
+      </ol>
+    </section>
+
+    <aside class="rx__cross">
+      <Icon name="stethoscope" size="1.2rem" />
+      <div><strong>No prescription yet?</strong><span>Book a quick consult with a licensed doctor instead.</span></div>
+      <a class="btn btn--ghost btn--sm" href="/booking">Book a consult</a>
+    </aside>
+  </div>
+
+  <section class="trust-strip"><div class="container"><TrustBadges /></div></section>
+</BaseLayout>
+
+<style>
+  .rx-hero { padding-block: var(--sp-8) var(--sp-4); }
+  .rx-hero h1 { font-size: var(--fs-800); margin-block: var(--sp-3); }
+  .rx-hero__lede { font-size: var(--fs-500); color: var(--c-ink-soft); margin-bottom: var(--sp-6); }
+  .rx { display: grid; gap: var(--sp-6); padding-bottom: var(--sp-8); }
+  .rx__card { padding: var(--sp-6); }
+  .rx__next h2 { font-size: var(--fs-600); margin-bottom: var(--sp-4); }
+  .rx__steps { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--sp-4); }
+  .rx__steps li { display: flex; align-items: flex-start; gap: var(--sp-3); }
+  .rx__ic { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: var(--c-clay-2); color: var(--c-terracotta-d); flex: none; }
+  .rx__steps strong { display: block; } .rx__steps span { color: var(--c-ink-soft); font-size: var(--fs-350); }
+  .rx__cross { display: flex; align-items: center; gap: var(--sp-4); padding: var(--sp-5); background: var(--c-clay-2); border: 1px solid var(--c-clay); border-radius: var(--radius-lg); }
+  .rx__cross > :global(svg) { color: var(--c-terracotta-d); flex: none; }
+  .rx__cross strong { display: block; } .rx__cross span { font-size: var(--fs-300); color: var(--c-ink-soft); }
+  .rx__cross .btn { margin-left: auto; flex: none; }
+  .trust-strip { border-block: 1px solid var(--c-cream-line); background: var(--c-clay-2); padding-block: var(--sp-5); }
+  @media (max-width: 560px) { .rx-hero h1 { font-size: var(--fs-700); } .rx__cross { flex-wrap: wrap; } .rx__cross .btn { margin-left: 0; } }
+</style>
+
+<script>
+  // Prefill medication from ?product=&name=
+  const params = new URLSearchParams(window.location.search);
+  const med = document.querySelector<HTMLInputElement>('[data-medication]');
+  const val = params.get('name') || (params.get('product') ? params.get('product')!.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : '');
+  if (val && med && !med.value) med.value = val;
+</script>

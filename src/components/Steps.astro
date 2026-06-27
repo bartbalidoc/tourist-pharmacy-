@@ -1,0 +1,33 @@
+---
+// Progress indicator for multi-step funnels (CRO: visible "Step N of M" reduces abandonment).
+interface Props { steps: string[]; current: number; }
+const { steps, current } = Astro.props;
+const pct = Math.round(((current - 1) / (steps.length - 1)) * 100);
+---
+<div class="steps" role="group" aria-label={`Step ${current} of ${steps.length}`}>
+  <div class="steps__bar"><span style={`width:${pct}%`}></span></div>
+  <ol class="steps__list">
+    {steps.map((s, i) => (
+      <li class:list={['steps__item', { done: i + 1 < current, on: i + 1 === current }]}>
+        <span class="steps__dot">{i + 1 < current ? '✓' : i + 1}</span>
+        <span class="steps__label">{s}</span>
+      </li>
+    ))}
+  </ol>
+</div>
+<style>
+  .steps { margin-bottom: var(--sp-6); }
+  .steps__bar { height: 6px; background: var(--c-paper-3); border-radius: 999px; overflow: hidden; }
+  .steps__bar span { display: block; height: 100%; background: var(--c-terracotta); border-radius: 999px; transition: width var(--dur-slow) var(--ease); }
+  .steps__list { list-style: none; padding: 0; margin: var(--sp-3) 0 0; display: flex; justify-content: space-between; gap: var(--sp-2); }
+  .steps__item { display: flex; align-items: center; gap: 0.45rem; font-size: var(--fs-300); color: var(--c-ink-faint); font-weight: 600; }
+  .steps__dot {
+    display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--c-paper-3); color: var(--c-ink-faint); font-size: var(--fs-300); flex: none;
+  }
+  .steps__item.on { color: var(--c-ink); }
+  .steps__item.on .steps__dot { background: var(--c-terracotta); color: #fff; }
+  .steps__item.done .steps__dot { background: var(--c-in-stock); color: #fff; }
+  .steps__item.done { color: var(--c-ink-soft); }
+  @media (max-width: 560px) { .steps__label { display: none; } .steps__list { justify-content: space-around; } }
+</style>

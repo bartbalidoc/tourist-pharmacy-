@@ -1,0 +1,155 @@
+---
+import Icon from './Icon.astro';
+import { FEEDBACK_ENDPOINT } from '../lib/site';
+---
+<!-- Left-edge tab — deliberately on the left so it never covers the WhatsApp button,
+     the product sticky CTA, or page content (all of which sit centre/right/bottom). -->
+<button class="fb-tab" data-fb-open aria-haspopup="dialog">
+  <Icon name="message" size="1.05rem" /> <span>Feedback</span>
+</button>
+
+<div class="fb" data-fb hidden>
+  <div class="fb__scrim" data-fb-close></div>
+  <div class="fb__panel" role="dialog" aria-modal="true" aria-labelledby="fb-title" data-fb-endpoint={FEEDBACK_ENDPOINT}>
+    <button class="fb__x" data-fb-close aria-label="Close feedback"><Icon name="close" size="1.1rem" /></button>
+    <div data-fb-form-wrap>
+      <h2 id="fb-title">Share feedback</h2>
+      <p class="fb__sub">Tell us what's good, broken, confusing, or missing on this page. Our AI tidies it into a clear point for the team.</p>
+      <form class="fb__form" data-fb-form>
+        <label class="fb__fld">
+          <span>Your name</span>
+          <input type="text" name="name" data-fb-name placeholder="Who's this from?" autocomplete="name" />
+        </label>
+        <label class="fb__fld">
+          <span>Your feedback *</span>
+          <textarea name="message" rows="4" required placeholder="e.g. the price on this product looks wrong / I'd move the booking button up / typo in the heading…"></textarea>
+        </label>
+        <label class="fb__check">
+          <input type="checkbox" name="screenshot" data-fb-shot checked />
+          <span>Include a screenshot of this page</span>
+        </label>
+        <p class="fb__page">Page: <code data-fb-page></code></p>
+        <button class="btn btn--primary fb__submit" type="submit"><Icon name="message" /> Send feedback</button>
+      </form>
+    </div>
+    <div class="fb__done" data-fb-done hidden>
+      <span class="fb__done-ic"><Icon name="check-circle" size="2rem" /></span>
+      <h2>Thank you!</h2>
+      <p data-fb-done-msg>Your feedback has been sent to the team.</p>
+      <button class="btn btn--ghost btn--sm" data-fb-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .fb-tab {
+    position: fixed; left: 0; top: 42%; z-index: 58;
+    transform-origin: left center; transform: rotate(-90deg) translateX(-50%);
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: var(--c-terracotta); color: #fff; border: 0; cursor: pointer;
+    font: inherit; font-weight: 700; font-size: var(--fs-300);
+    padding: 0.5rem 0.9rem; border-radius: 0 0 12px 12px;
+    box-shadow: var(--shadow);
+  }
+  .fb-tab:hover { background: var(--c-terracotta-d); }
+  .fb { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: var(--sp-4); }
+  .fb__scrim { position: absolute; inset: 0; background: rgba(15,31,46,0.55); }
+  .fb__panel { position: relative; width: min(520px, 100%); background: var(--c-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); padding: var(--sp-6); max-height: 90vh; overflow-y: auto; }
+  .fb__x { position: absolute; top: var(--sp-3); right: var(--sp-3); background: none; border: 0; color: var(--c-ink-faint); cursor: pointer; }
+  .fb__panel h2 { font-size: var(--fs-600); }
+  .fb__sub { color: var(--c-ink-soft); font-size: var(--fs-350); margin: var(--sp-2) 0 var(--sp-4); }
+  .fb__form { display: grid; gap: var(--sp-4); }
+  .fb__fld { display: grid; gap: 0.4rem; }
+  .fb__fld span { font-weight: 700; color: var(--c-ink-soft); font-size: var(--fs-300); }
+  .fb__fld input, .fb__fld textarea { padding: 0.75rem 0.9rem; border: 1.5px solid var(--c-cream-line); border-radius: var(--radius); font: inherit; background: var(--c-surface); color: var(--c-ink); }
+  .fb__fld textarea { resize: vertical; }
+  .fb__fld :focus-visible { outline: none; border-color: var(--c-terracotta); box-shadow: 0 0 0 4px var(--c-clay-2); }
+  .fb__check { display: flex; align-items: center; gap: 0.5rem; font-size: var(--fs-350); cursor: pointer; }
+  .fb__check input { width: 18px; height: 18px; accent-color: var(--c-terracotta); }
+  .fb__page { font-size: var(--fs-300); color: var(--c-ink-faint); margin: 0; }
+  .fb__page code { word-break: break-all; }
+  .fb__submit { width: 100%; justify-content: center; }
+  .fb__submit[disabled] { opacity: 0.6; cursor: progress; }
+  .fb__done { text-align: center; display: grid; gap: var(--sp-3); justify-items: center; padding: var(--sp-5) 0; }
+  .fb__done-ic { color: var(--c-in-stock); }
+  @media (prefers-reduced-motion: reduce) { .fb-tab { transition: none; } }
+</style>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-fb]');
+  if (root) {
+    const panel = root.querySelector<HTMLElement>('[data-fb-endpoint]')!;
+    const endpoint = panel.dataset.fbEndpoint || '';
+    const openBtn = document.querySelector<HTMLButtonElement>('[data-fb-open]');
+    const form = root.querySelector<HTMLFormElement>('[data-fb-form]');
+    const nameInput = root.querySelector<HTMLInputElement>('[data-fb-name]');
+    const shot = root.querySelector<HTMLInputElement>('[data-fb-shot]');
+    const pageEl = root.querySelector<HTMLElement>('[data-fb-page]');
+    const formWrap = root.querySelector<HTMLElement>('[data-fb-form-wrap]');
+    const done = root.querySelector<HTMLElement>('[data-fb-done]');
+    const doneMsg = root.querySelector<HTMLElement>('[data-fb-done-msg]');
+    const submit = root.querySelector<HTMLButtonElement>('[data-fb-form] .fb__submit');
+
+    const open = () => {
+      root.hidden = false;
+      if (pageEl) pageEl.textContent = location.pathname + location.search;
+      if (nameInput) nameInput.value = localStorage.getItem('tp_fb_name') || '';
+      formWrap!.hidden = false; done!.hidden = true;
+    };
+    const close = () => { root.hidden = true; };
+    openBtn?.addEventListener('click', open);
+    root.querySelectorAll('[data-fb-close]').forEach((b) => b.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !root.hidden) close(); });
+
+    // Lazy-load html2canvas only when a screenshot is needed.
+    function loadH2C(): Promise<any> {
+      if ((window as any).html2canvas) return Promise.resolve((window as any).html2canvas);
+      return new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload = () => res((window as any).html2canvas);
+        s.onerror = rej;
+        document.head.appendChild(s);
+      });
+    }
+    async function capture(): Promise<string | null> {
+      try {
+        const h2c = await loadH2C();
+        root!.hidden = true; // don't capture the modal itself
+        const canvas = await h2c(document.body, { useCORS: true, logging: false, scale: Math.min(1, 1200 / window.innerWidth), windowWidth: document.documentElement.clientWidth });
+        root!.hidden = false;
+        return canvas.toDataURL('image/jpeg', 0.6);
+      } catch { root!.hidden = false; return null; }
+    }
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = ((data.get('name') as string) || '').trim();
+      const message = ((data.get('message') as string) || '').trim();
+      if (!message) return;
+      if (name) localStorage.setItem('tp_fb_name', name);
+      submit!.setAttribute('disabled', 'true'); submit!.textContent = 'Capturing…';
+      const screenshot = shot?.checked ? await capture() : null;
+      submit!.textContent = 'Sending…';
+      const payload = { name, message, url: location.href, path: location.pathname + location.search, userAgent: navigator.userAgent, screenshot };
+
+      let okMsg = 'Your feedback has been sent to the team.';
+      try {
+        const res = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!res.ok) throw new Error(String(res.status));
+      } catch {
+        // No backend yet (e.g. local preview) — save a file so nothing is lost.
+        const md = `# Feedback\n\n- Page: ${payload.path}\n- From: ${name || 'anonymous'}\n- When: (download)\n\n${message}\n`;
+        const blob = new Blob([md], { type: 'text/markdown' });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+        a.download = `feedback-${Date.now()}.md`; a.click();
+        okMsg = "Saved locally (no server connected yet) — the file downloaded so it isn't lost.";
+      }
+      form.reset();
+      submit!.removeAttribute('disabled'); submit!.innerHTML = 'Send feedback';
+      if (doneMsg) doneMsg.textContent = okMsg;
+      formWrap!.hidden = true; done!.hidden = false;
+    });
+  }
+</script>

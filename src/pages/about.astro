@@ -1,0 +1,182 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { PHARMACY, PHARMACIST, OPERATOR, BALIDOC, SITE, WHATSAPP, waLink } from '../lib/site';
+
+// Map pins by pharmacy name + address (Google resolves the registered business). No API key.
+const mapQuery = `${PHARMACY.name}, ${PHARMACY.address}`;
+const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(mapQuery)}&z=16&output=embed`;
+const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`;
+
+// Structured data: the service operated by PT Sehat Investasi Digital; dispensing by the partner pharmacy.
+const orgLd = {
+  '@context': 'https://schema.org', '@type': 'MedicalBusiness',
+  name: SITE.name, description: SITE.description, url: SITE.url, telephone: WHATSAPP.display,
+  parentOrganization: { '@type': 'Organization', name: OPERATOR.name },
+  areaServed: 'Bali, Indonesia',
+};
+---
+
+<BaseLayout title="About Us"
+  description="Tourist Pharmacy is operated by PT Sehat Investasi Digital — the team behind BaliDoc — giving English-speaking tourists and expats a trusted, licensed way to get medicine in Bali.">
+  <script type="application/ld+json" set:html={JSON.stringify(orgLd)} is:inline />
+
+  <!-- WHO WE ARE -->
+  <section class="about-hero">
+    <div class="container about-hero__inner">
+      <div class="about-hero__text">
+        <p class="eyebrow">About us</p>
+        <h1>English-speaking healthcare in Bali, run by people you can actually reach.</h1>
+        <p class="about-hero__lede">
+          Tourist Pharmacy is operated by <strong>{OPERATOR.name}</strong> — the team behind
+          <strong>{BALIDOC.name}</strong>, {BALIDOC.tagline}. We help tourists and expats get the
+          medicine they need safely and legally, in plain English, without the guesswork.
+        </p>
+        <div class="about-hero__cta">
+          <a class="btn btn--primary" href="/products">Browse medicines <Icon name="arrow-right" /></a>
+          <a class="btn btn--ghost" href={waLink()} target="_blank" rel="noopener"><Icon name="whatsapp" /> Talk to us</a>
+        </div>
+      </div>
+      <figure class="about-hero__media">
+        <img src="/images/about.jpg" alt="A clean, modern pharmacy in Bali" width="1024" height="1024" loading="eager" decoding="async" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- IN ASSOCIATION WITH BALIDOC -->
+  <section class="assoc">
+    <div class="container assoc__inner">
+      {BALIDOC.logo
+        ? <img class="assoc__logo" src={BALIDOC.logo} alt={`In association with ${BALIDOC.name}`} height="40" />
+        : <span class="assoc__mark"><Icon name="heart-pulse" size="1.3rem" /></span>}
+      <p><strong>In association with {BALIDOC.name}.</strong> The licensed doctors behind your
+        consultations come from {BALIDOC.name}, Bali's established English-speaking telehealth service —
+        so there's real clinical accountability behind every prescription.</p>
+      <a class="assoc__link" href={BALIDOC.url} target="_blank" rel="noopener">Visit {BALIDOC.name} <Icon name="arrow-right" size="0.9rem" /></a>
+    </div>
+  </section>
+
+  <!-- OUR ROLE -->
+  <section class="story">
+    <div class="container container-narrow">
+      <div class="story__block">
+        <h2>One trusted, English-speaking point of contact</h2>
+        <p>No guessing which pharmacy to trust, no language barrier, no grey-market uncertainty. You
+          tell us what you need; we guide you through every step in plain English — by WhatsApp, in real time.</p>
+      </div>
+      <div class="story__block">
+        <h2>Licensed doctors, real accountability</h2>
+        <p>Because these are prescription medicines, a licensed doctor (via {BALIDOC.name}) must be
+          involved — it keeps you safe and keeps everything legal. Whether a prescription is issued is
+          always the doctor's clinical decision.</p>
+      </div>
+      <div class="story__block">
+        <h2>We coordinate the whole journey</h2>
+        <p>We handle the full process end to end: a short doctor consultation, a valid prescription,
+          dispensing by a <strong>licensed partner pharmacy</strong>, and delivery or pickup in Bali.
+          We are the service that makes it simple — the pharmacy's role is to dispense.</p>
+        <ol class="story__flow">
+          <li><span>1</span> Browse or tell us what you need</li>
+          <li><span>2</span> Licensed-doctor consultation (or upload your prescription)</li>
+          <li><span>3</span> Prescription issued to our partner pharmacy</li>
+          <li><span>4</span> Dispensed &amp; delivered in Bali</li>
+        </ol>
+      </div>
+      <div class="story__cta">
+        <a class="btn btn--primary" href="/booking">Get started <Icon name="arrow-right" /></a>
+        <a class="btn btn--ghost" href="/request">Can't find a medicine?</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LICENSING & DISPENSING (compliance — subtle) -->
+  <section class="legal" id="regulatory">
+    <div class="container container-narrow">
+      <header class="legal__head">
+        <p class="eyebrow">Licensing &amp; dispensing</p>
+        <h2>The licensing behind every medicine</h2>
+        <p class="legal__intro">For full transparency and regulatory compliance. Medicines are dispensed by our licensed partner pharmacy.</p>
+      </header>
+
+      <div class="legal__panel">
+        <div class="legal__group">
+          <h3>Service operator</h3>
+          <dl>
+            <div><dt>Company</dt><dd>{OPERATOR.name}</dd></div>
+            <div><dt>Operates</dt><dd>{OPERATOR.runs}</dd></div>
+            <div><dt>Company registration (NIB)</dt><dd>{OPERATOR.nib}</dd></div>
+            <div><dt>Office</dt><dd>{OPERATOR.office}<!-- TODO: full Jakarta office address --></dd></div>
+          </dl>
+        </div>
+
+        <div class="legal__group">
+          <h3>Dispensing partner pharmacy</h3>
+          <dl>
+            <div><dt>Pharmacy</dt><dd>{PHARMACY.name}</dd></div>
+            <div><dt>Address</dt><dd>{PHARMACY.address}</dd></div>
+            <div><dt>Izin Apotek No.</dt><dd>{PHARMACY.license}</dd></div>
+            <div><dt>Licensing authority</dt><dd>{PHARMACY.licenseAuthority}</dd></div>
+            <div><dt>Responsible pharmacist</dt><dd>{PHARMACIST.name}</dd></div>
+            <div><dt>STR / SIPA</dt><dd>{PHARMACIST.str} · {PHARMACIST.sipa}</dd></div>
+            <div><dt>GPS</dt><dd>{PHARMACY.gpsCoordinates}{PHARMACY.gpsApproximate ? ' (approx.)' : ''}</dd></div>
+          </dl>
+          <figure class="legal__map">
+            <iframe src={mapSrc} title={`Map of ${PHARMACY.name}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            <figcaption><a href={mapLink} target="_blank" rel="noopener">Open in Google Maps</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-hero { padding-block: var(--sp-8) var(--sp-6); }
+  .about-hero__inner { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--sp-7); align-items: center; }
+  .about-hero h1 { font-size: var(--fs-800); margin-block: var(--sp-3); }
+  .about-hero__lede { font-size: var(--fs-500); color: var(--c-ink-soft); max-width: 50ch; }
+  .about-hero__cta { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-5); }
+  .about-hero__media { margin: 0; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid var(--c-cream-line); }
+  .about-hero__media img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1/1; }
+
+  .assoc { background: var(--c-clay-2); border-block: 1px solid var(--c-cream-line); }
+  .assoc__inner { display: flex; align-items: center; gap: var(--sp-4); padding-block: var(--sp-5); }
+  .assoc__mark { flex: none; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 13px; background: var(--c-surface); color: var(--c-terracotta-d); box-shadow: var(--shadow-sm); }
+  .assoc__logo { flex: none; }
+  .assoc__inner p { margin: 0; color: var(--c-ink); font-size: var(--fs-350); }
+  .assoc__inner p strong { color: var(--c-ink); }
+  .assoc__link { margin-left: auto; flex: none; display: inline-flex; align-items: center; gap: 0.3rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+
+  .story { padding-block: var(--sp-8); }
+  .story__block { margin-bottom: var(--sp-6); }
+  .story__block h2 { font-size: var(--fs-600); margin-bottom: var(--sp-2); }
+  .story__block p { color: var(--c-ink); font-size: var(--fs-500); }
+  .story__flow { list-style: none; padding: 0; margin-top: var(--sp-4); display: grid; gap: var(--sp-2); }
+  .story__flow li { display: flex; align-items: center; gap: var(--sp-3); font-weight: 600; }
+  .story__flow span { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--c-terracotta); color: #fff; display: grid; place-items: center; font-size: var(--fs-300); }
+  .story__cta { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-6); }
+
+  /* Compliance — deliberately subtle / fine-print */
+  .legal { background: var(--c-paper-2); border-top: 1px solid var(--c-cream-line); padding-block: var(--sp-8); }
+  .legal__head { margin-bottom: var(--sp-5); }
+  .legal__head h2 { font-size: var(--fs-600); margin-top: var(--sp-2); }
+  .legal__intro { color: var(--c-ink-soft); font-size: var(--fs-350); }
+  .legal__panel { display: grid; grid-template-columns: 1fr 1.2fr; gap: var(--sp-6); background: var(--c-surface); border: 1px solid var(--c-cream-line); border-radius: var(--radius-lg); padding: var(--sp-6); }
+  .legal__group h3 { font-size: var(--fs-400); color: var(--c-ink); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--sp-3); }
+  .legal__group dl { display: grid; gap: var(--sp-2); margin: 0; }
+  .legal__group dt { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--c-ink-faint); font-weight: 700; }
+  .legal__group dd { margin: 0; color: var(--c-ink-soft); font-size: var(--fs-350); }
+  .legal__map { margin: var(--sp-4) 0 0; }
+  .legal__map iframe { width: 100%; height: 200px; border: 0; border-radius: var(--radius); border: 1px solid var(--c-cream-line); }
+  .legal__map figcaption { margin-top: var(--sp-2); font-size: var(--fs-300); }
+  .legal__map a { font-weight: 600; text-decoration: none; }
+
+  @media (max-width: 860px) {
+    .about-hero__inner { grid-template-columns: 1fr; }
+    .about-hero__media { order: -1; max-width: 420px; }
+    .assoc__inner { flex-wrap: wrap; }
+    .assoc__link { margin-left: 0; }
+    .legal__panel { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) { .about-hero h1 { font-size: var(--fs-700); } }
+</style>

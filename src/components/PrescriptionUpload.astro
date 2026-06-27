@@ -1,0 +1,136 @@
+---
+import Icon from './Icon.astro';
+import { WHATSAPP, MARKET } from '../lib/site';
+interface Props { name?: string; }
+const { name } = Astro.props;
+const hasEndpoint = !!MARKET.uploadEndpoint;
+---
+<form
+  class="rxup"
+  data-rxup
+  data-wa={WHATSAPP.link}
+  action={hasEndpoint ? MARKET.uploadEndpoint : '#'}
+  method="post"
+  enctype="multipart/form-data"
+>
+  <!-- File drop -->
+  <label class="rxup__drop" data-drop>
+    <input type="file" name="prescription" accept="image/*,application/pdf" data-file hidden />
+    <span class="rxup__drop-ic"><Icon name="upload" size="1.6rem" /></span>
+    <span class="rxup__drop-main">Tap to upload, or drag your prescription here</span>
+    <span class="rxup__drop-sub">Photo or PDF · JPG, PNG, HEIC, PDF</span>
+    <span class="rxup__preview" data-preview hidden></span>
+  </label>
+
+  <!-- Minimal fields first (CRO) -->
+  <div class="rxup__fields">
+    <label class="fld">
+      <span>Your name</span>
+      <input type="text" name="name" required autocomplete="name" placeholder="First name" />
+    </label>
+    <label class="fld">
+      <span>WhatsApp number</span>
+      <input type="tel" name="whatsapp" required autocomplete="tel" inputmode="tel" placeholder="+62 …" />
+    </label>
+    <label class="fld">
+      <span>Medication (optional)</span>
+      <input type="text" name="medication" value={name ?? ''} placeholder="e.g. Amoxicillin 500mg" data-medication />
+    </label>
+    <label class="fld">
+      <span>Delivery area in Bali (optional)</span>
+      <input type="text" name="area" placeholder="e.g. Canggu, Ubud, Sanur…" />
+    </label>
+  </div>
+
+  <p class="rxup__privacy"><span class="rxup__lock"><Icon name="lock" size="0.95rem" /></span>
+    Your prescription is shared only with our pharmacist to dispense your medicine. We never sell your data.</p>
+
+  <button class="btn btn--primary rxup__submit" type="submit">
+    <Icon name="upload" /> Send for pharmacist review
+  </button>
+  {!hasEndpoint && (
+    <p class="rxup__fallback">We'll open WhatsApp so you can send the prescription photo directly to our pharmacist.
+      <!-- TODO: set MARKET.uploadEndpoint (Netlify Forms / Formspree / backend) for in-page file upload --></p>
+  )}
+</form>
+
+<style>
+  .rxup { display: grid; gap: var(--sp-5); }
+  .rxup__drop {
+    display: grid; justify-items: center; gap: 0.35rem; text-align: center; cursor: pointer;
+    padding: var(--sp-7) var(--sp-5);
+    border: 2px dashed var(--c-cream-line); border-radius: var(--radius-lg);
+    background: var(--c-paper-2); color: var(--c-ink-soft);
+    transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+  }
+  .rxup__drop.drag, .rxup__drop:hover { border-color: var(--c-terracotta); background: var(--c-clay-2); }
+  .rxup__drop-ic { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 14px; background: var(--c-surface); color: var(--c-terracotta-d); box-shadow: var(--shadow-sm); }
+  .rxup__drop-main { font-weight: 700; color: var(--c-ink); }
+  .rxup__drop-sub { font-size: var(--fs-300); color: var(--c-ink-faint); }
+  .rxup__preview { margin-top: var(--sp-3); display: grid; gap: var(--sp-2); justify-items: center; }
+  .rxup__preview img { max-height: 160px; border-radius: var(--radius); border: 1px solid var(--c-cream-line); }
+  .rxup__preview .file { font-weight: 700; color: var(--c-in-stock); display: inline-flex; align-items: center; gap: 0.4rem; }
+
+  .rxup__fields { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+  .fld { display: grid; gap: 0.4rem; }
+  .fld span { font-weight: 700; color: var(--c-ink-soft); font-size: var(--fs-300); }
+  .fld input {
+    padding: 0.8rem 1rem; border: 1.5px solid var(--c-cream-line); border-radius: var(--radius);
+    font: inherit; background: var(--c-surface); color: var(--c-ink); min-height: 48px;
+  }
+  .fld input:focus-visible { outline: none; border-color: var(--c-terracotta); box-shadow: 0 0 0 4px var(--c-clay-2); }
+
+  .rxup__privacy { display: flex; align-items: center; gap: 0.5rem; font-size: var(--fs-300); color: var(--c-ink-faint); }
+  .rxup__lock { color: var(--c-in-stock); display: grid; place-items: center; flex: none; }
+  .rxup__submit { width: 100%; justify-content: center; font-size: var(--fs-500); }
+  .rxup__fallback { font-size: var(--fs-300); color: var(--c-ink-faint); text-align: center; }
+  @media (max-width: 560px) { .rxup__fields { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-rxup]');
+  if (form) {
+    const drop = form.querySelector<HTMLElement>('[data-drop]');
+    const file = form.querySelector<HTMLInputElement>('[data-file]');
+    const preview = form.querySelector<HTMLElement>('[data-preview]');
+    const waBase = form.dataset.wa || 'https://wa.me/';
+    const hasEndpoint = form.getAttribute('action') !== '#';
+
+    function showPreview() {
+      const f = file?.files?.[0];
+      if (!f || !preview) return;
+      preview.hidden = false;
+      if (f.type.startsWith('image/')) {
+        const url = URL.createObjectURL(f);
+        preview.innerHTML = `<img alt="Prescription preview" src="${url}"><span class="file">✓ ${f.name}</span>`;
+      } else {
+        preview.innerHTML = `<span class="file">✓ ${f.name}</span>`;
+      }
+    }
+    file?.addEventListener('change', showPreview);
+
+    ['dragenter', 'dragover'].forEach((e) =>
+      drop?.addEventListener(e, (ev) => { ev.preventDefault(); drop.classList.add('drag'); }));
+    ['dragleave', 'drop'].forEach((e) =>
+      drop?.addEventListener(e, (ev) => { ev.preventDefault(); drop.classList.remove('drag'); }));
+    drop?.addEventListener('drop', (ev: DragEvent) => {
+      if (file && ev.dataTransfer?.files?.length) { file.files = ev.dataTransfer.files; showPreview(); }
+    });
+
+    // WhatsApp fallback when no upload endpoint is configured.
+    if (!hasEndpoint) {
+      form.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        const data = new FormData(form);
+        const med = (data.get('medication') as string) || 'my medication';
+        const nm = (data.get('name') as string) || '';
+        const area = (data.get('area') as string) || '';
+        const msg =
+          `Hi Tourist Pharmacy, I'd like to upload a prescription for ${med}.` +
+          (nm ? ` Name: ${nm}.` : '') + (area ? ` Delivery area: ${area}.` : '') +
+          ` I'll attach the prescription photo here.`;
+        window.open(`${waBase}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+      });
+    }
+  }
+</script>

@@ -1,0 +1,69 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { OPERATOR, WHATSAPP, PHARMACY } from '../lib/site';
+---
+
+<LegalLayout
+  title="Privacy Policy"
+  description="How Tourist Pharmacy, operated by PT Sehat Investasi Digital, collects, uses and protects your personal and health information."
+  updated="DRAFT — pending legal review"
+>
+  <p class="todo">
+    <strong>Draft for review.</strong> This policy is a solid starting draft tailored to this
+    service. Have it reviewed by Indonesian legal counsel and confirm it reflects your actual data
+    practices before launch.
+  </p>
+
+  <h2>1. Who we are</h2>
+  <p>
+    Tourist Pharmacy (“we”, “us”) is a medication catalog and doctor-consultation booking service
+    operated by {OPERATOR.name} (Company Registration / NIB {OPERATOR.nib}). Medicines are dispensed
+    by our partner pharmacy, {PHARMACY.name}. This policy explains how we handle your information when
+    you use this website and our services.
+  </p>
+
+  <h2>2. Information we collect</h2>
+  <ul>
+    <li><strong>Contact details</strong> you provide — name, WhatsApp number, email.</li>
+    <li><strong>Health and order information</strong> needed to serve you — the medication you ask
+      about, details shared during your doctor consultation, and your prescription.</li>
+    <li><strong>Delivery details</strong> — where you would like your medication delivered in Bali.</li>
+    <li><strong>Basic website usage data</strong> — non-identifying analytics such as pages viewed,
+      used only to improve the site.</li>
+  </ul>
+
+  <h2>3. How we use your information</h2>
+  <ul>
+    <li>To coordinate your doctor consultation, prescription, and dispensing.</li>
+    <li>To communicate with you about your order and answer your questions.</li>
+    <li>To meet our legal and pharmacy-regulatory obligations.</li>
+  </ul>
+  <p>We do not sell your personal information.</p>
+
+  <h2>4. Sharing &amp; disclosure</h2>
+  <p>We share your information only as needed to provide the service, with:</p>
+  <ul>
+    <li>The <strong>licensed doctor</strong> who conducts your consultation and issues the prescription.</li>
+    <li>Our <strong>partner pharmacy</strong> ({PHARMACY.name}) to dispense your medication.</li>
+    <li><strong>Delivery providers</strong> to fulfil delivery in Bali.</li>
+    <li><strong>Authorities</strong> where required by Indonesian law.</li>
+  </ul>
+
+  <h2>5. Data security &amp; retention</h2>
+  <p>
+    We apply reasonable measures to protect your information and retain health and order records only
+    as long as required to provide the service and to meet legal/regulatory record-keeping obligations.
+  </p>
+
+  <h2>6. Your rights</h2>
+  <p>
+    You may request access to, correction of, or deletion of your personal information, subject to
+    legal record-keeping requirements. Contact us using the details below.
+  </p>
+
+  <h2>7. Contact</h2>
+  <p>
+    Questions about this policy or your data? Message us on WhatsApp at {WHATSAPP.display}, or via the
+    contact channels operated by {OPERATOR.name}.
+  </p>
+</LegalLayout>

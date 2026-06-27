@@ -1,0 +1,37 @@
+---
+import Icon from './Icon.astro';
+interface Props { title?: string; eyebrow?: string; viewAllHref?: string; }
+const { title, eyebrow, viewAllHref } = Astro.props;
+---
+<section class="rail">
+  {(title || viewAllHref) && (
+    <header class="rail__head">
+      <div>
+        {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+        {title && <h2>{title}</h2>}
+      </div>
+      {viewAllHref && (
+        <a class="rail__all" href={viewAllHref}>View all <Icon name="arrow-right" size="0.95rem" /></a>
+      )}
+    </header>
+  )}
+  <div class="rail__track"><slot /></div>
+</section>
+<style>
+  .rail__head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--sp-4); margin-bottom: var(--sp-5); }
+  .rail__head h2 { font-size: var(--fs-700); margin-top: var(--sp-1); }
+  .rail__all { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .rail__all:hover { gap: 0.55rem; }
+  .rail__track {
+    display: grid; grid-auto-flow: column; grid-auto-columns: minmax(230px, 1fr);
+    gap: var(--sp-5); overflow-x: auto; scroll-snap-type: x mandatory;
+    padding-bottom: var(--sp-3); margin-inline: calc(-1 * var(--sp-5)); padding-inline: var(--sp-5);
+    -webkit-overflow-scrolling: touch; scrollbar-width: thin;
+  }
+  .rail__track > :global(*) { scroll-snap-align: start; }
+  @media (min-width: 980px) {
+    /* On wide screens show as a grid (no scroll needed for typical rails) */
+    .rail__track { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); grid-auto-columns: auto; overflow: visible; margin-inline: 0; padding-inline: 0; }
+  }
+  @media (max-width: 560px) { .rail__track { grid-auto-columns: minmax(170px, 78%); } }
+</style>

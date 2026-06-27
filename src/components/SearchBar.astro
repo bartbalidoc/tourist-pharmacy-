@@ -1,0 +1,175 @@
+---
+import Icon from './Icon.astro';
+interface Props { size?: 'sm' | 'lg'; placeholder?: string; class?: string; }
+const { size = 'sm', placeholder = 'Search 3,500+ medicines…', class: cls = '' } = Astro.props;
+---
+<form class:list={['search', `search--${size}`, cls]} action="/products" method="get" role="search" data-instant autocomplete="off">
+  <span class="search__ic" aria-hidden="true"><Icon name="search" /></span>
+  <input name="q" type="search" placeholder={placeholder} autocomplete="off" enterkeyhint="search"
+         role="combobox" aria-expanded="false" aria-autocomplete="list" aria-label="Search medicines"
+         data-input />
+  <button class="search__btn" type="submit">Search</button>
+  <div class="ac" data-panel role="listbox" hidden></div>
+</form>
+<style>
+  .search { position: relative; display: flex; align-items: center; gap: 0.5rem; background: var(--c-surface); border: 1.5px solid var(--c-cream-line); border-radius: 999px; padding: 0.3rem 0.4rem 0.3rem 0.9rem; box-shadow: var(--shadow-sm); transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease); }
+  .search:focus-within { border-color: var(--c-terracotta); box-shadow: 0 0 0 4px var(--c-clay-2); }
+  .search__ic { display: grid; place-items: center; color: var(--c-ink-faint); flex: none; }
+  .search input { flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; color: var(--c-ink); padding: 0.5rem 0; }
+  .search input:focus { outline: none; }
+  .search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .search__btn { flex: none; border: 0; cursor: pointer; font: inherit; font-weight: 700; color: #fff; background: var(--c-terracotta); border-radius: 999px; padding: 0.6rem 1.2rem; transition: background-color var(--dur) var(--ease); }
+  .search__btn:hover { background: var(--c-terracotta-d); }
+  .search--lg { padding: 0.4rem 0.5rem 0.4rem 1.1rem; }
+  .search--lg input { font-size: var(--fs-500); padding: 0.7rem 0; }
+  .search--lg .search__btn { padding: 0.8rem 1.6rem; }
+
+  /* Autocomplete panel */
+  .ac {
+    position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 80;
+    background: var(--c-surface); border: 1px solid var(--c-cream-line);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-xl);
+    overflow: hidden; max-height: min(70vh, 460px); overflow-y: auto;
+  }
+  .ac__sugg { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--c-cream-line); align-items: center; }
+  .ac__sugg-lbl { font-size: var(--fs-300); color: var(--c-ink-faint); margin-right: 0.2rem; }
+  .ac__chip { font: inherit; font-size: var(--fs-300); font-weight: 700; border: 1px solid var(--c-cream-line); background: var(--c-paper-2); color: var(--c-terracotta-d); border-radius: 999px; padding: 0.25rem 0.7rem; cursor: pointer; }
+  .ac__chip:hover, .ac__chip.active { background: var(--c-clay-2); border-color: var(--c-terracotta-l); }
+  .ac__item { display: flex; align-items: center; gap: 0.85rem; padding: 0.7rem 0.95rem; text-decoration: none; color: var(--c-ink); border-bottom: 1px solid color-mix(in srgb, var(--c-cream-line) 60%, transparent); }
+  .ac__item:last-of-type { border-bottom: 0; }
+  .ac__item:hover, .ac__item.active { background: var(--c-clay-2); }
+  .ac__thumb { width: 46px; height: 46px; border-radius: 9px; object-fit: cover; background: var(--c-paper-2); border: 1px solid var(--c-cream-line); flex: none; }
+  .ac__txt { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; line-height: 1.25; }
+  .ac__name { display: block; font-weight: 600; font-size: var(--fs-350); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ac__meta { display: block; font-size: var(--fs-300); color: var(--c-ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ac__meta .alt { color: var(--c-terracotta-d); font-weight: 600; }
+  .ac__stock { font-size: 0.7rem; font-weight: 700; flex: none; }
+  .ac__stock.out { color: var(--c-out-stock); } .ac__stock.in { color: var(--c-in-stock); }
+  .ac__all { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.7rem 0.9rem; border-top: 1px solid var(--c-cream-line); background: var(--c-paper-2); font-weight: 700; font-size: var(--fs-350); color: var(--c-terracotta-d); text-decoration: none; }
+  .ac__all:hover { background: var(--c-clay-2); }
+  .ac__none { padding: 1rem; color: var(--c-ink-soft); font-size: var(--fs-350); text-align: center; }
+  .ac__none p { margin: 0 0 0.5rem; }
+  .ac__none-acts { display: flex; flex-direction: column; gap: 0.4rem; align-items: center; }
+  .ac__none-acts a { font-weight: 700; text-decoration: none; }
+  .ac__none-req { color: var(--c-terracotta-d); }
+  mark { background: var(--c-clay); color: inherit; border-radius: 3px; padding: 0 1px; }
+  @media (max-width: 480px) { .search__btn { padding: 0.6rem 0.9rem; } .search--lg input { font-size: var(--fs-400); } }
+</style>
+
+<script>
+  type E = { s: string; n: string; c: string; gr: string; f: string; g: string; k: 0 | 1; i: string; kw: string };
+  // Shared one-time index load across all SearchBar instances on the page.
+  let idxPromise: Promise<E[]> | null = null;
+  const loadIndex = () => (idxPromise ??= fetch('/search-index.json', { cache: 'force-cache' }).then((r) => r.json()).catch(() => [] as E[]));
+
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  function lev(a: string, b: string): number {
+    const m = a.length, n = b.length; if (!m) return n; if (!n) return m;
+    let prev = Array.from({ length: n + 1 }, (_, i) => i), cur = new Array(n + 1);
+    for (let i = 1; i <= m; i++) {
+      cur[0] = i;
+      for (let j = 1; j <= n; j++) {
+        const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+      }
+      [prev, cur] = [cur, prev];
+    }
+    return prev[n];
+  }
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+  function hl(name: string, q: string) {
+    const i = name.toLowerCase().indexOf(q);
+    if (i < 0) return esc(name);
+    return esc(name.slice(0, i)) + '<mark>' + esc(name.slice(i, i + q.length)) + '</mark>' + esc(name.slice(i + q.length));
+  }
+
+  function search(all: E[], raw: string) {
+    const q = norm(raw); if (q.length < 2) return { items: [] as any[], sugg: [] as string[] };
+    const toks = q.split(' ');
+    const scored: { e: E; sc: number; alt: boolean }[] = [];
+    for (const e of all) {
+      const nm = ' ' + norm(e.n) + ' ';
+      let sc = 0, alt = false;
+      if (nm.trim() === q) sc = 1000;
+      else if (nm.includes(' ' + q)) sc = 820;          // word-start
+      else if (nm.includes(q)) sc = 640;                // substring
+      else if (toks.every((t) => nm.includes(t))) sc = 360;
+      else if (e.kw && toks.every((t) => e.kw.includes(t))) { sc = 300; alt = true; }  // alt/ingredient
+      if (sc) { if (e.k) sc += 6; sc -= Math.min(e.n.length, 40) * 0.2; scored.push({ e, sc, alt }); }
+    }
+    scored.sort((a, b) => b.sc - a.sc);
+    // Typo suggestions: correct the WORD (brand or ingredient) from names + composition.
+    let sugg: string[] = [];
+    if (scored.length < 4) {
+      const qt = toks.reduce((a, b) => (b.length > a.length ? b : a), '');
+      if (qt.length >= 4) {
+        const thr = qt.length <= 6 ? 1 : 2;
+        const best = new Map<string, number>(); // word -> min edit distance
+        for (const e of all) {
+          for (const w of (norm(e.n) + ' ' + (e.kw || '')).split(' ')) {
+            if (w.length < 4 || w[0] !== qt[0] || Math.abs(w.length - qt.length) > 2) continue;
+            if (w.includes(qt) || qt.includes(w)) continue; // would already match directly
+            const d = lev(w, qt);
+            if (d <= thr) { const prev = best.get(w); if (prev === undefined || d < prev) best.set(w, d); }
+          }
+        }
+        sugg = Array.from(best.entries()).sort((a, b) => a[1] - b[1]).slice(0, 4).map(([w]) => w);
+      }
+    }
+    return { items: scored.slice(0, 7), sugg };
+  }
+
+  document.querySelectorAll<HTMLFormElement>('form[data-instant]').forEach((form) => {
+    const input = form.querySelector<HTMLInputElement>('[data-input]')!;
+    const panel = form.querySelector<HTMLElement>('[data-panel]')!;
+    let items: HTMLElement[] = [], active = -1, all: E[] = [], t: number | undefined;
+
+    const open = () => { panel.hidden = false; input.setAttribute('aria-expanded', 'true'); };
+    const close = () => { panel.hidden = true; input.setAttribute('aria-expanded', 'false'); active = -1; };
+
+    function render() {
+      const q = input.value.trim();
+      if (q.length < 2) { close(); return; }
+      const qn = norm(q);
+      const { items: res, sugg } = search(all, q);
+      let html = '';
+      if (sugg.length) html += `<div class="ac__sugg"><span class="ac__sugg-lbl">Did you mean</span>` +
+        sugg.map((s) => `<button type="button" class="ac__chip" data-sugg="${esc(s)}">${esc(s.charAt(0).toUpperCase() + s.slice(1))}</button>`).join('') + `</div>`;
+      if (res.length) {
+        html += res.map(({ e, alt }) => {
+          const meta = [e.f, e.g].filter(Boolean).join(' · ');
+          const altNote = alt ? `<span class="alt">contains ${esc(qn)}</span>` : '';
+          return `<a class="ac__item" role="option" href="/products/${encodeURIComponent(e.s)}">
+            <img class="ac__thumb" src="${esc(e.i)}" alt="" loading="lazy" width="44" height="44">
+            <span class="ac__txt"><span class="ac__name">${hl(e.n, qn)}</span><span class="ac__meta">${meta}${meta && altNote ? ' · ' : ''}${altNote}</span></span>
+            <span class="ac__stock ${e.k ? 'in' : 'out'}">${e.k ? '' : 'Out'}</span></a>`;
+        }).join('');
+        html += `<a class="ac__all" href="/products?q=${encodeURIComponent(q)}">See all results for “${esc(q)}” <span>→</span></a>`;
+      } else if (!sugg.length) {
+        html += `<div class="ac__none"><p>No medicines found for “${esc(q)}”.</p>` +
+          `<div class="ac__none-acts"><a href="/products?q=${encodeURIComponent(q)}">Browse catalog</a>` +
+          `<a class="ac__none-req" href="/request?q=${encodeURIComponent(q)}">Can't find it? Request via WhatsApp →</a></div></div>`;
+      }
+      panel.innerHTML = html;
+      items = Array.from(panel.querySelectorAll<HTMLElement>('.ac__item'));
+      active = -1; open();
+      panel.querySelectorAll<HTMLButtonElement>('[data-sugg]').forEach((b) =>
+        b.addEventListener('click', () => { input.value = b.dataset.sugg!; render(); input.focus(); }));
+    }
+
+    input.addEventListener('input', () => { window.clearTimeout(t); t = window.setTimeout(render, 110); if (!all.length) loadIndex().then((d) => { all = d; }); });
+    input.addEventListener('focus', () => { if (!all.length) loadIndex().then((d) => { all = d; }); if (input.value.trim().length >= 2) render(); });
+    input.addEventListener('keydown', (ev) => {
+      if (panel.hidden) return;
+      if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+        ev.preventDefault(); if (!items.length) return;
+        items[active]?.classList.remove('active');
+        active = ev.key === 'ArrowDown' ? (active + 1) % items.length : (active - 1 + items.length) % items.length;
+        items[active].classList.add('active'); items[active].scrollIntoView({ block: 'nearest' });
+      } else if (ev.key === 'Enter') {
+        if (active >= 0 && items[active]) { ev.preventDefault(); (items[active] as HTMLAnchorElement).href && (location.href = (items[active] as HTMLAnchorElement).href); }
+      } else if (ev.key === 'Escape') { close(); }
+    });
+    document.addEventListener('click', (ev) => { if (!form.contains(ev.target as Node)) close(); });
+  });
+</script>

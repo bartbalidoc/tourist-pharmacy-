@@ -1,0 +1,41 @@
+---
+import Icon from './Icon.astro';
+import { WHATSAPP, waLink } from '../lib/site';
+---
+
+<a class="sticky-wa" href={waLink()} target="_blank" rel="noopener"
+   aria-label={`Message us on WhatsApp at ${WHATSAPP.display}`}>
+  <span class="sticky-wa__icon"><Icon name="whatsapp" size="1.5rem" /></span>
+  <span class="sticky-wa__label">WhatsApp us</span>
+</a>
+
+<style>
+  .sticky-wa {
+    position: fixed;
+    right: clamp(0.85rem, 3vw, 1.6rem);
+    bottom: clamp(0.85rem, 3vw, 1.6rem);
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--c-whatsapp);
+    color: #08311b;
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 999px;
+    box-shadow: 0 10px 30px rgba(37,211,102,0.4);
+    transition: background-color var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .sticky-wa:hover { background: var(--c-whatsapp-d); color: #08311b; transform: translateY(-3px); box-shadow: 0 14px 36px rgba(37,211,102,0.5); }
+  .sticky-wa__icon { display: grid; place-items: center; }
+
+  @media (max-width: 560px) {
+    .sticky-wa__label { display: none; }
+    .sticky-wa { padding: 0.95rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-wa:hover { transform: none; }
+  }
+</style>

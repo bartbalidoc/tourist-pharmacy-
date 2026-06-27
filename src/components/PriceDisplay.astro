@@ -1,0 +1,100 @@
+---
+import { formatIdr } from '../lib/pricing';
+
+interface Props {
+  priceMinIdr: number;
+  priceMaxIdr: number;
+  priceMissing: boolean;
+  isRange: boolean;
+  /** Larger treatment on the product detail page; compact on cards. */
+  size?: 'sm' | 'lg';
+}
+const { priceMinIdr, priceMaxIdr, priceMissing, isRange, size = 'sm' } = Astro.props;
+const idrText = priceMissing
+  ? ''
+  : isRange
+    ? `${formatIdr(priceMinIdr)} – ${formatIdr(priceMaxIdr)}`
+    : formatIdr(priceMinIdr);
+---
+
+{priceMissing ? (
+  <p class="price price--todo">Price coming soon
+    <!-- TODO: populate Halodoc price via scripts/halodoc_prices.py + merge -->
+  </p>
+) : (
+  <div class:list={['price', `price--${size}`]}
+       data-price data-min={priceMinIdr} data-max={priceMaxIdr} data-range={isRange ? '1' : '0'}>
+    <!-- USD is the dominant price, filled in by the currency island. JS-off / API-fail -> hidden, IDR shown. -->
+    <span class="price__usd" data-usd hidden>—</span>
+    <span class="price__idr">{idrText}</span>
+    <span class="price__caption" data-caption hidden>Live rate</span>
+    <span class="price__fallback" data-fallback hidden>USD price temporarily unavailable</span>
+  </div>
+)}
+
+<style>
+  .price { display: grid; gap: 2px; }
+  .price--todo { font-weight: 700; color: var(--c-ink-soft); }
+
+  .price__usd {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--c-jungle);
+    line-height: 1.05;
+  }
+  .price--sm .price__usd { font-size: var(--fs-500); }
+  .price--lg .price__usd { font-size: var(--fs-700); }
+
+  .price__idr {
+    color: var(--c-ink-soft);
+    font-size: var(--fs-300);
+    font-weight: 600;
+  }
+  .price--lg .price__idr { font-size: var(--fs-400); }
+
+  .price__caption {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-brass);
+  }
+  .price__fallback { font-size: var(--fs-300); color: var(--c-out-stock); font-style: italic; }
+</style>
+
+<script>
+  import { getUsdPerIdr } from '../lib/currency';
+  import { formatUsd } from '../lib/pricing';
+
+  async function hydratePrices() {
+    const nodes = document.querySelectorAll<HTMLElement>('[data-price]');
+    if (!nodes.length) return;
+
+    const rate = await getUsdPerIdr();
+
+    nodes.forEach((node) => {
+      const min = Number(node.dataset.min);
+      const max = Number(node.dataset.max);
+      const isRange = node.dataset.range === '1';
+      const usdEl = node.querySelector<HTMLElement>('[data-usd]');
+      const capEl = node.querySelector<HTMLElement>('[data-caption]');
+      const fbEl = node.querySelector<HTMLElement>('[data-fallback]');
+      if (!usdEl) return;
+
+      if (rate && min > 0) {
+        usdEl.textContent = isRange && max > min
+          ? `${formatUsd(min, rate)} – ${formatUsd(max, rate)}`
+          : formatUsd(min, rate);
+        usdEl.hidden = false;
+        if (capEl) capEl.hidden = false;
+        if (fbEl) fbEl.hidden = true;
+      } else {
+        // Graceful fallback — keep IDR visible, note USD unavailable.
+        usdEl.hidden = true;
+        if (capEl) capEl.hidden = true;
+        if (fbEl) fbEl.hidden = false;
+      }
+    });
+  }
+
+  hydratePrices();
+</script>

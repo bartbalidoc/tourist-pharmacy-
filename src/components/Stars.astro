@@ -1,0 +1,21 @@
+---
+// Star rating display (filled stars). Accessible label included.
+interface Props { rating: number; count?: number; size?: string; }
+const { rating, count, size = '1rem' } = Astro.props;
+const full = Math.round(rating);
+const star = 'M12 3l2.6 5.3 5.8.85-4.2 4.1 1 5.8-5.2-2.74L6.8 19.1l1-5.8-4.2-4.1 5.8-.85z';
+---
+<span class="stars" role="img" aria-label={`${rating} out of 5 stars${count ? `, ${count} reviews` : ''}`}>
+  {[0, 1, 2, 3, 4].map((i) => (
+    <svg viewBox="0 0 24 24" width={size} height={size} class:list={['star', { on: i < full }]} aria-hidden="true">
+      <path d={star} />
+    </svg>
+  ))}
+  {count != null && <span class="stars__count">({count.toLocaleString('en-US')})</span>}
+</span>
+<style>
+  .stars { display: inline-flex; align-items: center; gap: 1px; }
+  .star { fill: var(--c-cream-line); }
+  .star.on { fill: var(--c-star); }
+  .stars__count { margin-left: 0.4rem; font-size: var(--fs-300); color: var(--c-ink-faint); font-weight: 600; }
+</style>

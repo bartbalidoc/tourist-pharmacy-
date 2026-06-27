@@ -1,0 +1,90 @@
+/* =============================================================================
+   TOURIST PHARMACY — DESIGN TOKENS (v5: brand navy + gold, conversion-first)
+
+   Logo-led brand identity: NAVY (trust foundation — #1 trust color for healthcare)
+   + GOLD as the primary CTA "pop" (warm, max-saliency, Amazon-proven high-conversion
+   button, navy text for AA contrast) + GREEN for success/in-stock. Clean white base.
+
+   NOTE: variable names kept stable so components don't break; values changed.
+   --c-terracotta = NAVY (brand). Primary CTA buttons use the new --c-cta (gold).
+   ============================================================================= */
+
+:root {
+  /* --- Neutrals (white + cool slate) --------------------------------------- */
+  --c-paper:        #ffffff;
+  --c-paper-2:      #f4f7fb;  /* cool light section tint */
+  --c-paper-3:      #e6edf5;
+  --c-surface:      #ffffff;
+
+  --c-ink:          #16243a;  /* body text (dark navy-slate) */
+  --c-ink-soft:     #4b596f;
+  --c-ink-faint:    #8893a6;
+
+  /* --- Brand: NAVY (names kept for compatibility) -------------------------- */
+  --c-terracotta:   #16365c;  /* PRIMARY brand navy (links, accents, icon chips) */
+  --c-terracotta-d: #0f2742;  /* darker navy (hover) */
+  --c-terracotta-l: #5b7a9e;  /* light navy */
+  --c-clay:         #dbe5f0;  /* navy tint surface */
+  --c-clay-2:       #eef3f9;  /* lighter navy tint */
+
+  --c-jungle:       #16365c;  /* headings = navy (brand) */
+  --c-jungle-2:     #1e4a78;  /* mid navy */
+  --c-jungle-d:     #0c2238;  /* darkest navy (dark sections) */
+  --c-sage:         #15803d;  /* green */
+
+  --c-brass:        #e3a52e;  /* GOLD accent (ticks, stars, premium details) */
+  --c-brass-l:      #f3d79a;
+  --c-cream-line:   #e3e9f1;  /* cool hairline border */
+
+  /* --- Primary CTA: GOLD (high-conversion), navy text ---------------------- */
+  --c-cta:          #e3a52e;
+  --c-cta-d:        #cf9526;  /* hover */
+  --c-cta-ink:      #16365c;  /* text on gold (AA ~5:1) */
+
+  /* --- Functional / status -------------------------------------------------- */
+  --c-red-label:    #dc2626;
+  --c-red-label-bg: #fdecea;
+  --c-in-stock:     #15803d;
+  --c-in-stock-bg:  #e7f5ec;
+  --c-out-stock:    #c2410c;
+  --c-out-stock-bg: #fdeee5;
+  --c-whatsapp:     #25d366;
+  --c-whatsapp-d:   #1eb257;
+  --c-info:         #2563eb;
+  --c-star:         #e3a52e;  /* brand gold stars */
+
+  /* --- Gradients (navy for dark chips; gold for premium accents) ------------ */
+  --grad-warm:   linear-gradient(135deg, #27568a 0%, #16365c 100%);  /* navy (white icons) */
+  --grad-jungle: linear-gradient(160deg, #1e4a78 0%, #0c2238 100%);
+  --grad-gold:   linear-gradient(135deg, #efbb55 0%, #d9971f 100%);
+  --grad-sun:    radial-gradient(120% 120% at 80% 0%, rgba(22,54,92,0.08), transparent 55%);
+  --grad-paper:  linear-gradient(180deg, #ffffff 0%, #f4f7fb 100%);
+
+  /* --- Typography ----------------------------------------------------------- */
+  --font-display: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body:    "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --fs-300: 0.8125rem; --fs-350: 0.9375rem; --fs-400: 1rem; --fs-500: 1.125rem;
+  --fs-600: 1.35rem; --fs-700: 1.75rem; --fs-800: 2.3rem; --fs-900: clamp(2.3rem, 5vw, 3.7rem);
+
+  --lh-tight: 1.12; --lh-snug: 1.3; --lh-body: 1.65;
+  --tracking-tight: -0.02em; --tracking-wide: 0.1em;
+
+  --sp-1: 0.25rem; --sp-2: 0.5rem; --sp-3: 0.75rem; --sp-4: 1rem;
+  --sp-5: 1.5rem;  --sp-6: 2rem;   --sp-7: 3rem;    --sp-8: 4.5rem; --sp-9: 7rem;
+
+  --container: 76rem; --container-narrow: 46rem;
+  --radius-sm: 8px; --radius: 12px; --radius-lg: 16px; --radius-xl: 22px;
+
+  --shadow-xs: 0 1px 2px rgba(15,31,46,0.04);
+  --shadow-sm: 0 1px 2px rgba(15,31,46,0.04), 0 2px 6px rgba(15,31,46,0.05);
+  --shadow:    0 2px 6px rgba(15,31,46,0.05), 0 10px 24px rgba(15,31,46,0.07);
+  --shadow-lg: 0 8px 24px rgba(15,31,46,0.09), 0 24px 48px rgba(15,31,46,0.09);
+  --shadow-xl: 0 12px 32px rgba(15,31,46,0.11), 0 36px 64px rgba(15,31,46,0.11);
+  --shadow-brass: 0 8px 22px rgba(227,165,46,0.30);  /* gold CTA shadow */
+  --shadow-terra: 0 8px 22px rgba(227,165,46,0.30);  /* (legacy name) gold */
+
+  --ease: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur: 200ms; --dur-slow: 360ms;
+}

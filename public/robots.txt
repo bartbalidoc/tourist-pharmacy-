@@ -1,0 +1,5 @@
+# Tourist Pharmacy — allow full crawling; this catalog should be fully indexed.
+User-agent: *
+Allow: /
+
+Sitemap: https://touristpharmacy.com/sitemap.xml

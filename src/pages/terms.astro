@@ -1,0 +1,71 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { OPERATOR, WHATSAPP, PHARMACY, PHARMACIST, CONSULT_PRICE_USD } from '../lib/site';
+---
+
+<LegalLayout
+  title="Terms of Use"
+  description="The terms governing your use of the Tourist Pharmacy website and services, operated by PT Sehat Investasi Digital."
+  updated="DRAFT — pending legal review"
+>
+  <p class="todo">
+    <strong>Draft for review.</strong> These terms are a solid starting draft tailored to this
+    service. Have them reviewed by Indonesian legal counsel before launch.
+  </p>
+
+  <h2>1. About these terms</h2>
+  <p>
+    These terms govern your use of the Tourist Pharmacy website and services, operated by
+    {OPERATOR.name} (NIB {OPERATOR.nib}). By using this site you agree to them. If you do not agree,
+    please do not use the service.
+  </p>
+
+  <h2>2. What we are (and are not)</h2>
+  <p>
+    Tourist Pharmacy is a <strong>medication catalog and booking service</strong>. It is not a cart,
+    checkout, or payment system. All medicines listed are prescription-only (obat keras) and require a
+    valid doctor’s prescription, obtained through a consultation, before they can be dispensed by our
+    partner pharmacy, {PHARMACY.name} (Responsible Pharmacist: {PHARMACIST.name}).
+  </p>
+
+  <h2>3. Prescriptions &amp; consultations</h2>
+  <p>
+    To obtain a prescription medicine you must complete a consultation with a licensed doctor (via
+    video call or WhatsApp). The consultation fee is USD {CONSULT_PRICE_USD} (included if you have
+    already consulted via BaliDoc). Whether a prescription is issued is at the sole clinical judgement
+    of the doctor; payment for a consultation does not guarantee a prescription.
+  </p>
+
+  <h2>4. No medical advice</h2>
+  <p>
+    Product information on this site is for general reference only and is not medical advice and not a
+    substitute for consultation with a qualified healthcare professional. Always follow your doctor’s
+    and pharmacist’s instructions.
+  </p>
+
+  <h2>5. Pricing</h2>
+  <p>
+    Prices shown are indicative and may be displayed as a range. USD amounts are derived from a live
+    exchange rate and may change; the IDR figure is the reference price. The <strong>final price is
+    confirmed at dispensing</strong>. We are not bound by a price shown in error.
+  </p>
+
+  <h2>6. Eligibility</h2>
+  <p>
+    You must be at least 18 years old to use this service and provide accurate information. Medicines
+    are dispensed and delivered within Bali, Indonesia.
+  </p>
+
+  <h2>7. Limitation of liability</h2>
+  <p>
+    To the extent permitted by Indonesian law, {OPERATOR.name} is not liable for indirect or
+    consequential loss arising from use of this website. Nothing here limits liability that cannot be
+    limited by law.
+  </p>
+
+  <h2>8. Governing law</h2>
+  <p>These terms are governed by the laws of the Republic of Indonesia.</p>
+
+  <h2>9. Contact</h2>
+  <p>Questions about these terms? Message us on WhatsApp at {WHATSAPP.display}.</p>
+</LegalLayout>

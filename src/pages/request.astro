@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import MedicineRequest from '../components/MedicineRequest.astro';
+import TrustBadges from '../components/TrustBadges.astro';
+---
+
+<BaseLayout title="Request a Medicine"
+  description="Can't find your medication on our site? Tell us what you need and our team will search our full supply and source it for you.">
+  <section class="rq-hero">
+    <div class="container container-narrow">
+      <p class="eyebrow">Can't find it?</p>
+      <h1>Request a medicine</h1>
+      <p class="rq-hero__lede">We carry 3,500+ medicines, and we can source many more. Tell us what you need — our team checks our full supply and replies on WhatsApp, usually fast.</p>
+    </div>
+  </section>
+
+  <div class="container container-narrow rq">
+    <section class="card rq__card"><MedicineRequest /></section>
+
+    <section class="rq__how">
+      <h2>What happens next</h2>
+      <ol class="rq__steps">
+        <li><span class="rq__ic"><Icon name="search" size="1.1rem" /></span><div><strong>We search our supply</strong><span>Including stock not listed online and what we can source.</span></div></li>
+        <li><span class="rq__ic"><Icon name="message" size="1.1rem" /></span><div><strong>We reply on WhatsApp</strong><span>With availability, price, and whether a consult or prescription is needed.</span></div></li>
+        <li><span class="rq__ic"><Icon name="truck" size="1.1rem" /></span><div><strong>Dispense &amp; deliver</strong><span>Once a licensed prescription is in place, we dispense and deliver in Bali.</span></div></li>
+      </ol>
+    </section>
+  </div>
+
+  <section class="trust-strip"><div class="container"><TrustBadges /></div></section>
+</BaseLayout>
+
+<style>
+  .rq-hero { padding-block: var(--sp-8) var(--sp-4); }
+  .rq-hero h1 { font-size: var(--fs-800); margin-block: var(--sp-3); }
+  .rq-hero__lede { font-size: var(--fs-500); color: var(--c-ink-soft); }
+  .rq { display: grid; gap: var(--sp-6); padding-block: var(--sp-6) var(--sp-8); }
+  .rq__card { padding: var(--sp-6); }
+  .rq__how h2 { font-size: var(--fs-600); margin-bottom: var(--sp-4); }
+  .rq__steps { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--sp-4); }
+  .rq__steps li { display: flex; align-items: flex-start; gap: var(--sp-3); }
+  .rq__ic { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: var(--c-clay-2); color: var(--c-terracotta-d); flex: none; }
+  .rq__steps strong { display: block; } .rq__steps span { color: var(--c-ink-soft); font-size: var(--fs-350); }
+  .trust-strip { border-block: 1px solid var(--c-cream-line); background: var(--c-clay-2); padding-block: var(--sp-5); }
+  @media (max-width: 560px) { .rq-hero h1 { font-size: var(--fs-700); } }
+</style>

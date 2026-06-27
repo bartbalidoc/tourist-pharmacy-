@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 200" role="img" aria-label="Tourist Pharmacy">
+  <title>Tourist Pharmacy</title>
+  <defs><clipPath id="lk-globe"><circle cx="100" cy="100" r="84"/></clipPath></defs>
+  <!-- mark -->
+  <circle cx="100" cy="100" r="84" fill="#16365c"/>
+  <g clip-path="url(#lk-globe)" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1.6" fill="none">
+    <ellipse cx="100" cy="100" rx="33" ry="84"/><ellipse cx="100" cy="100" rx="63" ry="84"/>
+    <line x1="16" y1="100" x2="184" y2="100"/>
+  </g>
+  <g>
+    <rect x="78" y="62" width="44" height="116" rx="11" fill="#16365c"/>
+    <rect x="42" y="98" width="116" height="44" rx="11" fill="#16365c"/>
+    <rect x="84" y="68" width="32" height="104" rx="7" fill="#e3a52e"/>
+    <rect x="48" y="104" width="104" height="32" rx="7" fill="#e3a52e"/>
+  </g>
+  <!-- wordmark -->
+  <text x="214" y="92" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" letter-spacing="1" fill="#16365c">Tourist</text>
+  <text x="214" y="150" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" letter-spacing="1" fill="#16365c">Pharmacy</text>
+  <rect x="216" y="108" width="0" height="0"/>
+</svg>

@@ -1,0 +1,57 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  /** Product slug to pre-fill the booking flow. */
+  slug?: string;
+  /** Product name to pre-fill the booking flow. */
+  name?: string;
+  compact?: boolean;
+}
+const { slug, name, compact = false } = Astro.props;
+const bookingHref = slug
+  ? `/booking?product=${slug}${name ? `&name=${encodeURIComponent(name)}` : ''}`
+  : '/booking';
+---
+
+<aside class:list={['redlabel', { 'redlabel--compact': compact }]} role="note">
+  <span class="redlabel__badge" aria-hidden="true"><Icon name="alert" size="1.3rem" /></span>
+  <div class="redlabel__body">
+    <p class="redlabel__text">
+      <strong>Prescription-only medicine (red-label / obat keras).</strong>
+      A valid doctor's prescription is required before this can be dispensed.
+    </p>
+    {!compact && (
+      <a class="btn btn--primary btn--sm redlabel__cta" href={bookingHref}>
+        Get a Prescription <Icon name="arrow-right" />
+      </a>
+    )}
+  </div>
+</aside>
+
+<style>
+  .redlabel {
+    display: flex;
+    gap: var(--sp-3);
+    align-items: flex-start;
+    background: var(--c-red-label-bg);
+    border: 1px solid color-mix(in srgb, var(--c-red-label) 30%, transparent);
+    border-left: 5px solid var(--c-red-label);
+    border-radius: var(--radius);
+    padding: var(--sp-4) var(--sp-5);
+  }
+  .redlabel__badge {
+    flex: none;
+    display: grid; place-items: center;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--c-red-label) 12%, #fff);
+    color: var(--c-red-label);
+  }
+  .redlabel__body { display: grid; gap: var(--sp-3); }
+  .redlabel__text { color: #6e1812; margin: 0; }
+  .redlabel__text strong { color: var(--c-red-label); }
+  .redlabel__cta { justify-self: start; }
+
+  .redlabel--compact { padding: var(--sp-3) var(--sp-4); }
+  .redlabel--compact .redlabel__text { font-size: var(--fs-300); }
+</style>

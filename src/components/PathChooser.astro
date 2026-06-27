@@ -1,0 +1,52 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  /** Optional product context to prefill the funnels. */
+  slug?: string;
+  name?: string;
+  heading?: string;
+}
+const { slug, name, heading } = Astro.props;
+const q = slug ? `?product=${slug}${name ? `&name=${encodeURIComponent(name)}` : ''}` : '';
+---
+<div class="paths">
+  {heading && <h2 class="paths__h">{heading}</h2>}
+  <div class="paths__grid">
+    <a class="path" href={`/booking${q}`}>
+      <span class="path__ic"><Icon name="stethoscope" size="1.4rem" /></span>
+      <span class="path__tag">No prescription yet?</span>
+      <strong class="path__title">Book a doctor consult</strong>
+      <span class="path__desc">A quick 10–15 min consult with a licensed doctor by video or WhatsApp, then your prescription is issued.</span>
+      <span class="path__cta">Start consult <Icon name="arrow-right" size="0.95rem" /></span>
+    </a>
+    <a class="path path--alt" href={`/prescription${q}`}>
+      <span class="path__ic"><Icon name="upload" size="1.4rem" /></span>
+      <span class="path__tag">Already have one?</span>
+      <strong class="path__title">Upload your prescription</strong>
+      <span class="path__desc">Send us your existing prescription. Our pharmacist reviews it, then we dispense and deliver in Bali.</span>
+      <span class="path__cta">Upload prescription <Icon name="arrow-right" size="0.95rem" /></span>
+    </a>
+  </div>
+</div>
+<style>
+  .paths__h { text-align: center; font-size: var(--fs-700); margin-bottom: var(--sp-5); }
+  .paths__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); }
+  .path {
+    display: grid; gap: 0.5rem; align-content: start;
+    padding: var(--sp-6); border-radius: var(--radius-xl);
+    text-decoration: none; color: var(--c-ink);
+    background: var(--c-surface); border: 1.5px solid var(--c-cream-line);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .path:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--c-terracotta); }
+  .path__ic { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--c-terracotta); color: #fff; box-shadow: var(--shadow-terra); margin-bottom: var(--sp-2); }
+  .path--alt .path__ic { background: var(--c-jungle-2); }
+  .path__tag { font-size: var(--fs-300); font-weight: 700; text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--c-terracotta-d); }
+  .path--alt .path__tag { color: var(--c-ink-soft); }
+  .path__title { font-family: var(--font-display); font-size: var(--fs-600); color: var(--c-ink); }
+  .path__desc { color: var(--c-ink-soft); font-size: var(--fs-350); }
+  .path__cta { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: var(--sp-2); font-weight: 700; color: var(--c-terracotta-d); }
+  .path:hover .path__cta { gap: 0.6rem; }
+  @media (max-width: 760px) { .paths__grid { grid-template-columns: 1fr; } }
+</style>

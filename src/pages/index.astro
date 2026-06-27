@@ -1,0 +1,199 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProductCard from '../components/ProductCard.astro';
+import Icon from '../components/Icon.astro';
+import SearchBar from '../components/SearchBar.astro';
+import PathChooser from '../components/PathChooser.astro';
+import CategoryTiles from '../components/CategoryTiles.astro';
+import TrustBadges from '../components/TrustBadges.astro';
+import Rail from '../components/Rail.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Stars from '../components/Stars.astro';
+import { products } from '../lib/products';
+import { MARKET } from '../lib/site';
+
+// Popular rail — in-stock, priced, spread across categories.
+const seen = new Set<string>();
+const popular: typeof products = [];
+for (const p of products) {
+  if (!p.in_stock || p.priceMissing || p.controlled) continue; // never feature controlled meds
+  if (seen.has(p.category)) continue;
+  seen.add(p.category);
+  popular.push(p);
+  if (popular.length === 8) break;
+}
+
+const how = [
+  { icon: 'search', t: 'Find your medicine', d: 'Search or browse 3,500+ licensed medicines.' },
+  { icon: 'file-text', t: 'Get a prescription', d: 'Book a quick doctor consult — or upload one you already have.' },
+  { icon: 'shield-check', t: 'Pharmacist dispenses', d: 'A licensed pharmacist reviews and prepares your medicine.' },
+  { icon: 'truck', t: 'Delivered in Bali', d: 'Pickup or local delivery, fast.' },
+];
+---
+
+<BaseLayout title="Your English-speaking pharmacy in Bali" fullTitle="Tourist Pharmacy — Your English-speaking pharmacy in Bali">
+  <!-- HERO (search-led, conversion above the fold) -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__text">
+        <p class="eyebrow">Licensed · BPOM-compliant · Bali</p>
+        <h1 class="hero__title">Prescription medicine in Bali, <span>made simple.</span></h1>
+        <p class="hero__lede">
+          The trusted, English-speaking way to get the medicine you need — licensed doctors, a real
+          pharmacist, delivered across Bali.
+        </p>
+        <div class="hero__search"><SearchBar size="lg" /></div>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="/products">Browse all medicines <Icon name="arrow-right" /></a>
+          <a class="btn btn--ghost" href="/booking">How it works</a>
+        </div>
+        <ul class="hero__points">
+          <li><Icon name="stethoscope" size="1.05rem" /> Licensed doctors online</li>
+          <li><Icon name="truck" size="1.05rem" /> {MARKET.deliveryPromise}</li>
+          <li><Icon name="globe" size="1.05rem" /> English-speaking support</li>
+        </ul>
+      </div>
+      <div class="hero__visual">
+        <div class="hero__media">
+          <img src="/images/hero.jpg" alt="Bright, modern pharmacy in Bali" loading="eager" decoding="async"
+               onerror="this.closest('.hero__media').classList.add('no-img')" />
+          <div class="hero__media-fallback"><span class="hero__mark"><Icon name="cross" size="2rem" /></span></div>
+        </div>
+        <div class="hero__chip">
+          <Stars rating={5} size="0.95rem" />
+          <div><strong>Trusted by tourists &amp; expats</strong><small>English support · real pharmacist</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWO PATHS (the prescription gate, surfaced early) -->
+  <section class="section paths-sec">
+    <div class="container">
+      <header class="sec-head">
+        <p class="eyebrow">Two easy ways</p>
+        <h2>How would you like to get your medicine?</h2>
+      </header>
+      <PathChooser />
+    </div>
+  </section>
+
+  <!-- SHOP BY CONDITION -->
+  <section class="section">
+    <div class="container">
+      <header class="sec-head sec-head--left">
+        <div><p class="eyebrow">Shop by condition</p><h2>Find the right medicine, fast</h2></div>
+        <a class="sec-head__all" href="/products">Browse all <Icon name="arrow-right" size="0.95rem" /></a>
+      </header>
+      <CategoryTiles />
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="trust-strip">
+    <div class="container"><TrustBadges /></div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section how">
+    <div class="container">
+      <header class="sec-head"><p class="eyebrow">How it works</p><h2>From "what do I need?" to medicine in hand</h2></header>
+      <ol class="how__grid">
+        {how.map((s, i) => (
+          <li class="how__card">
+            <span class="how__ic"><Icon name={s.icon} size="1.35rem" /></span>
+            <span class="how__n">{`0${i + 1}`}</span>
+            <h3>{s.t}</h3><p>{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- POPULAR -->
+  <section class="section">
+    <div class="container">
+      <Rail eyebrow="From the catalog" title="Popular medicines" viewAllHref="/products">
+        {popular.map((p) => <ProductCard product={p} />)}
+      </Rail>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <Testimonials />
+
+  <!-- CLOSER -->
+  <section class="closer">
+    <div class="container container-narrow closer__inner">
+      <h2>Not sure where to start?</h2>
+      <p>Search for your medicine, or message us in plain English — we'll guide you.</p>
+      <div class="closer__search"><SearchBar size="lg" /></div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* HERO */
+  .hero { position: relative; overflow: hidden; background: var(--grad-paper); border-bottom: 1px solid var(--c-cream-line); }
+  .hero__inner { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: var(--sp-7); align-items: center; padding-block: var(--sp-8); }
+  .hero__title { font-size: var(--fs-900); margin-block: var(--sp-3); font-weight: 800; }
+  .hero__title span { color: var(--c-terracotta); }
+  .hero__lede { font-size: var(--fs-500); color: var(--c-ink-soft); max-width: 46ch; }
+  .hero__search { margin-top: var(--sp-5); max-width: 32rem; }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-4); }
+  .hero__points { list-style: none; padding: 0; margin: var(--sp-5) 0 0; display: flex; flex-wrap: wrap; gap: var(--sp-4) var(--sp-5); font-weight: 600; font-size: var(--fs-350); color: var(--c-ink); }
+  .hero__points li { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .hero__points :global(svg) { color: var(--c-terracotta); }
+
+  .hero__visual { position: relative; }
+  .hero__media { border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid var(--c-cream-line); aspect-ratio: 4/3.2; background: var(--c-paper-2); }
+  .hero__media img { width: 100%; height: 100%; object-fit: cover; }
+  .hero__media-fallback { position: absolute; inset: 0; display: none; place-items: center; background: var(--grad-warm); }
+  .hero__media.no-img img { display: none; }
+  .hero__media.no-img .hero__media-fallback { display: grid; }
+  .hero__mark { display: grid; place-items: center; width: 88px; height: 88px; border-radius: 24px; background: rgba(255,255,255,0.15); color: #fff; }
+  .hero__chip { position: absolute; left: -6%; bottom: 8%; display: flex; align-items: center; gap: 0.7rem; background: var(--c-surface); border: 1px solid var(--c-cream-line); border-radius: var(--radius); padding: 0.7rem 0.95rem; box-shadow: var(--shadow-lg); }
+  .hero__chip strong { display: block; font-size: var(--fs-350); color: var(--c-ink); }
+  .hero__chip small { color: var(--c-ink-faint); font-size: var(--fs-300); }
+
+  /* shared section headers */
+  .sec-head { text-align: center; max-width: 46ch; margin: 0 auto var(--sp-6); }
+  .sec-head .eyebrow { justify-content: center; }
+  .sec-head h2 { font-size: var(--fs-700); margin-top: var(--sp-2); }
+  .sec-head--left { display: flex; justify-content: space-between; align-items: flex-end; text-align: left; max-width: none; }
+  .sec-head--left .eyebrow { justify-content: flex-start; }
+  .sec-head--left h2 { margin-top: var(--sp-1); }
+  .sec-head__all { display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .sec-head__all:hover { gap: 0.55rem; }
+  .paths-sec { background: var(--c-paper-2); }
+
+  /* TRUST STRIP */
+  .trust-strip { border-block: 1px solid var(--c-cream-line); background: var(--c-clay-2); padding-block: var(--sp-5); }
+
+  /* HOW */
+  .how__grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-5); }
+  .how__card { position: relative; overflow: hidden; background: var(--c-surface); border: 1px solid var(--c-cream-line); border-radius: var(--radius-lg); padding: var(--sp-6) var(--sp-5) var(--sp-5); box-shadow: var(--shadow-xs); }
+  .how__ic { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 14px; background: var(--c-terracotta); color: #fff; box-shadow: var(--shadow-terra); }
+  .how__n { position: absolute; top: var(--sp-4); right: var(--sp-5); font-family: var(--font-display); font-size: var(--fs-700); color: var(--c-paper-3); font-weight: 800; }
+  .how__card h3 { font-size: var(--fs-500); margin-top: var(--sp-4); }
+  .how__card p { color: var(--c-ink-soft); font-size: var(--fs-350); margin-top: var(--sp-2); }
+
+  /* CLOSER */
+  .closer { background: var(--c-paper-2); border-top: 1px solid var(--c-cream-line); padding-block: var(--sp-8); }
+  .closer__inner { text-align: center; display: grid; gap: var(--sp-4); justify-items: center; }
+  .closer__inner h2 { font-size: var(--fs-700); }
+  .closer__inner p { color: var(--c-ink-soft); font-size: var(--fs-500); max-width: 44ch; }
+  .closer__search { width: 100%; max-width: 32rem; margin-top: var(--sp-2); }
+
+  @media (max-width: 920px) {
+    .hero__inner { grid-template-columns: 1fr; gap: var(--sp-7); }
+    .hero__visual { order: -1; max-width: 460px; margin-inline: auto; width: 100%; }
+    .how__grid { grid-template-columns: repeat(2, 1fr); }
+    .sec-head--left { flex-direction: column; align-items: flex-start; gap: var(--sp-3); }
+  }
+  @media (max-width: 560px) {
+    .hero__title { font-size: var(--fs-800); }
+    .how__grid { grid-template-columns: 1fr; }
+    .hero__chip { left: 0; }
+  }
+</style>

@@ -1,0 +1,99 @@
+---
+import Icon from './Icon.astro';
+import { MARKET } from '../lib/site';
+const hasEndpoint = !!MARKET.uploadEndpoint;
+---
+<form class="req" data-req data-wa="https://wa.me/6289518023363"
+      action={hasEndpoint ? MARKET.uploadEndpoint : '#'} method="post">
+  <div class="req__grid">
+    <label class="fld fld--wide">
+      <span>Which medication are you looking for? *</span>
+      <input type="text" name="medication" required data-medication placeholder="e.g. Adderall, Panadol, Ventolin…" autocomplete="off" />
+    </label>
+    <label class="fld">
+      <span>Quantity needed</span>
+      <input type="text" name="quantity" placeholder="e.g. 30 tablets / 1 box" autocomplete="off" />
+    </label>
+    <label class="fld">
+      <span>Which country are you in right now? *</span>
+      <input type="text" name="country" required placeholder="e.g. Indonesia (Bali), Australia…" autocomplete="country-name" />
+    </label>
+    <label class="fld">
+      <span>Do you already have a prescription? *</span>
+      <select name="has_rx" required>
+        <option value="" disabled selected>Choose…</option>
+        <option value="Yes">Yes, I have one</option>
+        <option value="No">No, I need one</option>
+        <option value="Not sure">Not sure</option>
+      </select>
+    </label>
+    <label class="fld">
+      <span>Your name *</span>
+      <input type="text" name="name" required autocomplete="name" placeholder="First name" />
+    </label>
+    <label class="fld">
+      <span>WhatsApp number *</span>
+      <input type="tel" name="whatsapp" required inputmode="tel" autocomplete="tel" placeholder="+62 …" />
+    </label>
+    <label class="fld fld--wide">
+      <span>Anything else? (dosage, brand, when you need it)</span>
+      <textarea name="notes" rows="2" placeholder="Optional"></textarea>
+    </label>
+  </div>
+
+  <p class="req__privacy"><span class="req__lock"><Icon name="lock" size="0.95rem" /></span>
+    We only use these details to find your medicine and reply to you. We never sell your data.</p>
+
+  <button class="btn btn--primary req__submit" type="submit"><Icon name="whatsapp" /> Send request via WhatsApp</button>
+  {!hasEndpoint && <p class="req__fallback">We'll open WhatsApp with your request ready to send.
+    <!-- TODO: set MARKET.uploadEndpoint to collect requests server-side instead --></p>}
+</form>
+
+<style>
+  .req { display: grid; gap: var(--sp-5); }
+  .req__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+  .fld { display: grid; gap: 0.4rem; }
+  .fld--wide { grid-column: 1 / -1; }
+  .fld span { font-weight: 700; color: var(--c-ink-soft); font-size: var(--fs-300); }
+  .fld input, .fld select, .fld textarea {
+    padding: 0.8rem 1rem; border: 1.5px solid var(--c-cream-line); border-radius: var(--radius);
+    font: inherit; background: var(--c-surface); color: var(--c-ink); min-height: 48px;
+  }
+  .fld textarea { min-height: auto; resize: vertical; }
+  .fld input:focus-visible, .fld select:focus-visible, .fld textarea:focus-visible { outline: none; border-color: var(--c-terracotta); box-shadow: 0 0 0 4px var(--c-clay-2); }
+  .req__privacy { display: flex; align-items: center; gap: 0.5rem; font-size: var(--fs-300); color: var(--c-ink-faint); margin: 0; }
+  .req__lock { color: var(--c-in-stock); display: grid; place-items: center; flex: none; }
+  .req__submit { width: 100%; justify-content: center; font-size: var(--fs-500); }
+  .req__fallback { font-size: var(--fs-300); color: var(--c-ink-faint); text-align: center; }
+  @media (max-width: 560px) { .req__grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-req]');
+  if (form) {
+    // Prefill the medication from ?q= (e.g. arriving from a "no results" search).
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q');
+    const med = form.querySelector<HTMLInputElement>('[data-medication]');
+    if (q && med && !med.value) med.value = q;
+
+    const waBase = form.dataset.wa || 'https://wa.me/';
+    if (form.getAttribute('action') === '#') {
+      form.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        const d = new FormData(form);
+        const g = (k: string) => ((d.get(k) as string) || '').trim();
+        const lines = [
+          `Hi Tourist Pharmacy, I couldn't find a medication on your site:`,
+          `• Medication: ${g('medication')}`,
+          g('quantity') && `• Quantity: ${g('quantity')}`,
+          `• I'm currently in: ${g('country')}`,
+          `• Already have a prescription: ${g('has_rx')}`,
+          g('notes') && `• Notes: ${g('notes')}`,
+          `• Name: ${g('name')}`,
+        ].filter(Boolean);
+        window.open(`${waBase}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+      });
+    }
+  }
+</script>
