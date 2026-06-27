@@ -43,14 +43,18 @@ import { FEEDBACK_ENDPOINT } from '../lib/site';
 
 <style>
   .fb-tab {
-    position: fixed; left: 0; top: 42%; z-index: 58;
-    transform-origin: left center; transform: rotate(-90deg) translateX(-50%);
-    display: inline-flex; align-items: center; gap: 0.4rem;
+    position: fixed; left: 0; top: 50%; z-index: 58;
+    transform: translateY(-50%);
+    /* Vertical text via writing-mode = flush to the left edge, never clipped
+       off-screen (the old rotate(-90deg)+translateX pushed half of it out of frame). */
+    writing-mode: vertical-rl;
+    display: inline-flex; align-items: center; gap: 0.45rem;
     background: var(--c-terracotta); color: #fff; border: 0; cursor: pointer;
-    font: inherit; font-weight: 700; font-size: var(--fs-300);
-    padding: 0.5rem 0.9rem; border-radius: 0 0 12px 12px;
+    font: inherit; font-weight: 700; font-size: var(--fs-300); letter-spacing: 0.01em;
+    padding: 0.95rem 0.5rem; border-radius: 0 12px 12px 0;
     box-shadow: var(--shadow);
   }
+  .fb-tab :global(svg) { transform: rotate(90deg); }
   .fb-tab:hover { background: var(--c-terracotta-d); }
   .fb { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: var(--sp-4); }
   /* `display: grid` above would otherwise defeat the [hidden] attribute (author CSS beats the

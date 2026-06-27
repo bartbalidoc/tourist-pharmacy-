@@ -104,9 +104,13 @@ app.post('/login', express.urlencoded({ extended: false }), (req, res) => {
   res.status(401).type('html').send(loginPage('Incorrect password. Try again.'));
 });
 
+// Assets the login page itself needs — served even when logged out (so the logo shows).
+const PUBLIC_ASSETS = new Set(['/logo-mark.svg', '/favicon.svg']);
+
 // --- gate everything below ---------------------------------------------------
 app.use((req, res, next) => {
   if (authed(req)) return next();
+  if (req.method === 'GET' && PUBLIC_ASSETS.has(req.path)) return next(); // login-page logo/favicon
   if (req.method === 'GET' && (req.headers.accept || '').includes('text/html')) return res.redirect('/login');
   res.status(401).json({ error: 'unauthorized' });
 });
