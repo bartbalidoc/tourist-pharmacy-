@@ -74,6 +74,9 @@ import { FEEDBACK_ENDPOINT } from '../lib/site';
   .fb__submit { width: 100%; justify-content: center; }
   .fb__submit[disabled] { opacity: 0.6; cursor: progress; }
   .fb__done { text-align: center; display: grid; gap: var(--sp-3); justify-items: center; padding: var(--sp-5) 0; }
+  /* Same fix as .fb[hidden]: this `display: grid` would otherwise defeat the [hidden] attribute,
+     leaving the "Thank you" panel visible under the form on load. */
+  .fb__done[hidden] { display: none; }
   .fb__done-ic { color: var(--c-in-stock); }
   @media (prefers-reduced-motion: reduce) { .fb-tab { transition: none; } }
 </style>
