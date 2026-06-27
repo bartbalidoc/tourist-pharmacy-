@@ -75,26 +75,27 @@ git status            # lists what changed
 
 ---
 
-## Part 3 — Make the change go live (on the droplet)
+## Part 3 — Going live is now automatic ✨
 
-Pushing to GitHub does **not** update the live site by itself — the droplet has to pull and rebuild.
-SSH into the droplet and run:
+**You don't have to do anything to deploy.** The droplet runs the review site as a Docker container
+(`/root/tourist-review`) and a cron job checks GitHub **every 2 minutes**. When it sees a new commit on
+`main`, it automatically pulls, rebuilds the container, and health-checks it. So:
 
+> **Push to GitHub → it's live within ~2 minutes. No console, no SSH, nothing to run.**
+
+How it works (for reference — you don't run these):
+- `deploy.sh` (in this repo, lives on the droplet) = pull + rebuild + health-check, with a lock so it
+  never runs twice at once.
+- cron line on the droplet: `*/2 * * * * /root/tourist-review/deploy.sh --quiet-if-noop`
+- A deploy only happens when there's actually a new commit; otherwise the cron does nothing.
+
+**Want it live *immediately* instead of waiting up to 2 min?** Ask Claude — it has deploy access and can
+run `deploy.sh` on the droplet on demand. Or, if you're on the droplet console yourself:
 ```bash
-cd /var/www/tourist-pharmacy        # wherever you cloned it
-git pull                            # get the latest code from GitHub
-npm install                         # only needed if dependencies changed
-npm run build                       # rebuild the ~3,500 pages
-pm2 restart tourist-review          # restart the server with the new build
+/root/tourist-review/deploy.sh        # deploy right now
 ```
 
-Tip: save that as a one-liner on the droplet so a deploy is a single command:
-```bash
-git pull && npm install && npm run build && pm2 restart tourist-review
-```
-
-The new version is live the moment `pm2 restart` finishes. Check `pm2 logs tourist-review` if anything
-looks off.
+Check deploy history anytime: `cat /var/log/tp-deploy.log` on the droplet.
 
 ---
 
@@ -107,10 +108,16 @@ Reviewers' notes are written into `feedback/` **on the droplet**. To work on the
   this — same `gh auth login` step, done once on the droplet.)*
 - **Otherwise (manual):** copy them down whenever you want:
   ```bash
-  scp -r root@YOUR_DROPLET_IP:/var/www/tourist-pharmacy/feedback ./
+  scp -r root@206.189.200.138:/root/tourist-review/feedback ./
   ```
 
-You can always read live feedback in the browser at `https://<your-review-domain>/feedback` (behind the login).
+You can always read live feedback in the browser at `http://206.189.200.138:8080/feedback` (behind the login).
+
+### The feedback → fix → live loop
+1. Team uses the **Feedback** tab on the live site → notes (AI-structured) land in `feedback/` on the droplet.
+2. You review them (browser `/feedback`, or pull the files down) and decide what to change.
+3. Claude implements the fix and pushes → the droplet **auto-deploys within ~2 min** (or instantly on request).
+4. Team refreshes and sees the change. Repeat.
 
 ---
 
@@ -119,10 +126,11 @@ You can always read live feedback in the browser at `https://<your-review-domain
 | I want to… | Where | Command |
 |---|---|---|
 | Save my edits to GitHub | VS Code | `git add -A && git commit -m "…" && git push` |
-| Make it live | Droplet (SSH) | `git pull && npm install && npm run build && pm2 restart tourist-review` |
+| Make it live | — | **Automatic** — happens within ~2 min of pushing (or ask Claude to deploy now) |
 | See what I changed | VS Code | `git status` |
-| Get reviewer feedback locally | VS Code | `git pull` (if `FEEDBACK_GIT=1`) or `scp -r …/feedback ./` |
-| Turn the feedback tab off (go public) | VS Code | set `REVIEW_MODE = false` in `src/lib/site.ts`, then push + redeploy |
+| Get reviewer feedback locally | VS Code | `scp -r root@206.189.200.138:/root/tourist-review/feedback ./` |
+| See deploy history | Droplet | `cat /var/log/tp-deploy.log` |
+| Turn the feedback tab off (go public) | VS Code | set `REVIEW_MODE = false` in `src/lib/site.ts`, then push (auto-deploys) |
 
 ---
 
