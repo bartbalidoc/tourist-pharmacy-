@@ -1,0 +1,24 @@
+# Tourist Pharmacy — review site, as its own isolated container.
+# Runs ALONGSIDE other apps on the droplet without touching them: its own image,
+# its own port, feedback persisted to a host folder. Remove anytime with
+# `docker compose down` (nothing else is affected).
+#
+#   1. cp .env.example .env   &&   nano .env     # set SITE_PASSWORD + OPENAI_API_KEY
+#   2. docker compose up -d --build
+#
+services:
+  tourist-review:
+    build: .
+    image: tourist-review:latest
+    container_name: tourist-review
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - PORT=8080
+    ports:
+      # Reachable directly at http://<droplet-ip>:8080 (behind the login).
+      # For the nginx-subdomain route instead, change to "127.0.0.1:8080:8080".
+      - "8080:8080"
+    volumes:
+      # Reviewer feedback lands here on the host (survives container rebuilds).
+      - ./feedback:/app/feedback
