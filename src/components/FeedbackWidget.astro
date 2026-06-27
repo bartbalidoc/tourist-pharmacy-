@@ -53,6 +53,9 @@ import { FEEDBACK_ENDPOINT } from '../lib/site';
   }
   .fb-tab:hover { background: var(--c-terracotta-d); }
   .fb { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: var(--sp-4); }
+  /* `display: grid` above would otherwise defeat the [hidden] attribute (author CSS beats the
+     UA [hidden]{display:none} rule), leaving the modal stuck open. This restores hide-on-hidden. */
+  .fb[hidden] { display: none; }
   .fb__scrim { position: absolute; inset: 0; background: rgba(15,31,46,0.55); }
   .fb__panel { position: relative; width: min(520px, 100%); background: var(--c-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); padding: var(--sp-6); max-height: 90vh; overflow-y: auto; }
   .fb__x { position: absolute; top: var(--sp-3); right: var(--sp-3); background: none; border: 0; color: var(--c-ink-faint); cursor: pointer; }
